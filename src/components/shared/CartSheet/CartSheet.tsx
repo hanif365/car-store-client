@@ -18,11 +18,51 @@ import {
   updateQuantity,
 } from "@/redux/features/cart/cartSlice";
 import { FaShoppingCart } from "react-icons/fa";
+import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
 
 const CartSheet = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const cartData = useAppSelector((state) => state.cart);
 
+
+  const [createOrder, { isLoading, isSuccess, data, isError, error }] =
+    useCreateOrderMutation();
+
+  const handlePlaceOrder = async () => {
+    try {
+      const orderData = {
+        items: cartData.items.map(item => ({
+          product: item._id,
+          quantity: item.quantity,
+        })),
+        address: "Pabna Sader, test2", // Replace with actual address if needed
+        contactNo: "01712345668", // Replace with actual contact number if needed
+        city: "Pabna", // Replace with actual city if needed
+      };
+
+      console.log("cartData from handlePlaceOrder", { orderData });
+      await createOrder(orderData).unwrap();
+      toast.success("Order placed successfully!");
+    } catch (error) {
+      toast.error("Failed to place order: " + error?.message);
+    }
+  };
+
+  const toastId = "cart";
+  useEffect(() => {
+    if (isLoading) toast.loading("Processing ...", { id: toastId });
+
+    if (isSuccess) {
+      toast.success(data?.message, { id: toastId });
+      if (data?.data) {
+        setTimeout(() => {
+          window.location.href = data.data;
+        }, 1000);
+      }
+    }
+
+    if (isError) toast.error(JSON.stringify(error), { id: toastId });
+  }, [data?.data, data?.message, error, isError, isLoading, isSuccess]);
 
   return (
     <Sheet>
@@ -125,8 +165,8 @@ const CartSheet = ({ onClose }) => {
 
         <SheetFooter className="border-t pt-4">
           <SheetClose asChild>
-            <Button className="w-full" onClick={onClose}>
-              Close
+            <Button className="w-full" onClick={handlePlaceOrder}>
+              Place Order
             </Button>
           </SheetClose>
         </SheetFooter>
