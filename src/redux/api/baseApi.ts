@@ -32,6 +32,7 @@ import {
   > = async (args, api, extraOptions): Promise<any> => {
     let result = await baseQuery(args, api, extraOptions);
   
+    //need to remove this
     if (result?.error?.status === 404) {
       const message = (result.error.data as { message: string }).message;
       toast.error(message);
@@ -40,6 +41,8 @@ import {
       const message = (result.error.data as { message: string }).message;
       toast.error(message);
     }
+    // 
+
     if (result?.error?.status === 401) {
       //* Send Refresh
       console.log('Sending refresh token');

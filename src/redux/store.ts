@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
+import productsReducer from "./features/products/productsSlice";
 import { baseApi } from "./api/baseApi";
 
 import {
@@ -14,18 +15,25 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
+const authPersistConfig = {
   key: "auth",
   storage,
 };
 
-const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+const productsPersistConfig = {
+  key: "products",
+  storage,
+};
+
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedProductsReducer = persistReducer(productsPersistConfig, productsReducer);
 
 export const store = configureStore({
   reducer: {
     // Automatically adds the api reducer to the store with a key based on the reducerPath
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
+    products: persistedProductsReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

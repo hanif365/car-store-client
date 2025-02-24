@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 import verifyToken from '@/utils/verifyToken';
 import { TUser } from '../../../redux/features/auth/authSlice';
+import { Link } from 'react-router-dom';
 
 interface LoginFormData {
   email: string;
@@ -76,6 +77,9 @@ const LoginForm = () => {
         {isLoading ? "Logging in..." : "Login"}
       </button>
       {loginError && <p className="mt-2 text-sm text-red-600">{loginError}</p>}
+      <p className="mt-4 text-center">
+        Need an account? <Link to="/register" className="text-primary hover:underline">Register here</Link>
+      </p>
     </form>
   );
 };

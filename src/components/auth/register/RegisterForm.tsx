@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "../../../redux/features/auth/authApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface RegisterFormData {
@@ -25,7 +25,10 @@ const RegisterForm = () => {
     try {
       await registerUser(data).unwrap();
       reset();
-      toast.success("Registration successful! Please login.", { id: toastId, duration: 2000 });
+      toast.success("Registration successful! Please login.", {
+        id: toastId,
+        duration: 2000,
+      });
       navigate("/login");
     } catch (err: any) {
       toast.error(err.data?.message || "Registration failed", { id: toastId });
@@ -82,7 +85,6 @@ const RegisterForm = () => {
           type="password"
           {...register("password", {
             required: "Password is required",
-            
           })}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
         />
@@ -102,6 +104,13 @@ const RegisterForm = () => {
           {error instanceof Error ? error.message : "An error occurred"}
         </p>
       )}
+
+      <p className="mt-4 text-center">
+        Already registered?{" "}
+        <Link to="/login" className="text-primary hover:underline">
+          Login here
+        </Link>
+      </p>
     </form>
   );
 };

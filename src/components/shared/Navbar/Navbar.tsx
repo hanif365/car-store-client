@@ -1,191 +1,132 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaCarSide } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { selectCurrentToken, logout } from "@/redux/features/auth/authSlice";
+import "./Navbar.css";
+import { FaEquals, FaXmark } from "react-icons/fa6";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [navbar, setNavbar] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [showShadow, setShowShadow] = useState(false);
+  const token = useAppSelector(selectCurrentToken);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setNavbar(false);
+  };
+
+  const changeBackgroundNavbar = () => {
+    if (window.scrollY >= 800) {
+      setShowNavbar(true);
+      setShowShadow(true);
+    } else if (window.scrollY <= 20) {
+      setShowNavbar(true);
+      setShowShadow(false);
+    } else {
+      setShowNavbar(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", changeBackgroundNavbar);
+    return () => {
+      window.removeEventListener("scroll", changeBackgroundNavbar);
+    };
+  }, []);
 
   return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo Section */}
-          <div className="flex-shrink-0 flex items-center">
+    <nav
+      className={`${
+        showNavbar
+          ? showShadow
+            ? "md:translate-y-0 w-full bg-white fixed top-0 left-0 right-0 z-50 shadow-md"
+            : "translate-y-0 w-full bg-white md:bg-transparent fixed top-0 left-0 right-0 z-50"
+          : "w-full bg-white top-0 left-0 right-0 z-50 fixed md:-translate-y-full"
+      } transform transition-all duration-1000 pt-5`}
+    >
+      <div className="justify-between px-4 mx-auto lg:max-w-7xl 2xl:max-w-48xl md:items-center md:flex md:px-8">
+        <div>
+          <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Link to="/" className="flex items-center space-x-2">
-              <FaCarSide className="text-2xl text-primary" />
-              <span className="text-xl font-bold text-primary">CarStore</span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="text-gray-700 hover:text-primary transition-colors"
-            >
-              Home
+              <img src="/car-store.png" alt="CarStore Logo" className="w-6 h-6" />
+              <span className="text-xl font-bold text-[#00095E] hidden md:block">CarStore</span>
             </Link>
 
-            {/* Products Dropdown */}
-            <div className="relative">
+            <div className="md:hidden">
               <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center text-gray-700 hover:text-primary transition-colors"
+                className="text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
+                onClick={() => setNavbar(!navbar)}
               >
-                Products
-                {/* Chevron Down SVG */}
-                <svg
-                  className="ml-1 h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                {navbar ? (
+                  <FaXmark className="w-8 h-8 text-red-500" />
+                ) : (
+                  <FaEquals className="w-8 h-8 text-black" />
+                )}
               </button>
-
-              {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                  <Link
-                    to="/products/new"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    New Cars
-                  </Link>
-                  <Link
-                    to="/products/used"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Used Cars
-                  </Link>
-                </div>
-              )}
             </div>
-
-            <Link
-              to="/about"
-              className="text-gray-700 hover:text-primary transition-colors"
-            >
-              About
-            </Link>
-
-            <Link
-              to="/contact"
-              className="text-gray-700 hover:text-primary transition-colors"
-            >
-              Contact
-            </Link>
           </div>
+        </div>
 
-          {/* Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-gray-700 hover:text-primary transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
-            >
-              Register
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              {isOpen ? (
-                // X (Close) SVG
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+        <div>
+          <div
+            className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
+              navbar ? "p-12 md:p-0 block" : "hidden md:block"
+            }`}
+          >
+            <ul className="h-screen md:h-auto items-center justify-center md:flex">
+              <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                location.pathname === "/" ? "text-[#7EA0FF]" : "text-[#00095E]"
+              }`}>
+                <Link
+                  to="/"
+                  className={location.pathname === "/" ? "" : "underline_design"}
+                  onClick={() => setNavbar(false)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                  Home
+                </Link>
+              </li>
+
+              <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                location.pathname === "/about" ? "text-[#7EA0FF]" : "text-[#00095E]"
+              }`}>
+                <Link
+                  to="/about"
+                  className={location.pathname === "/about" ? "" : "underline_design"}
+                  onClick={() => setNavbar(false)}
+                >
+                  About
+                </Link>
+              </li>
+
+              {token ? (
+                <li className="text-xl font-bold py-2 px-6 text-center border-b-2 md:border-b-0">
+                  <button
+                    onClick={handleLogout}
+                    className="text-red-500 hover:text-red-600 transition duration-700 ease-in-out"
+                  >
+                    Logout
+                  </button>
+                </li>
               ) : (
-                // Menu (Hamburger) SVG
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                <>
+                  <li className="text-xl font-bold py-2 px-6 text-center border-b-2 md:border-b-0">
+                    <Link
+                      to="/login"
+                      className="text-green-500 hover:text-green-600 transition duration-700 ease-in-out"
+                      onClick={() => setNavbar(false)}
+                    >
+                      Login
+                    </Link>
+                  </li>
+                </>
               )}
-            </button>
+            </ul>
           </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {isOpen && (
-        <div className="md:hidden bg-white">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              to="/"
-              className="block px-3 py-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              Home
-            </Link>
-            <Link
-              to="/products"
-              className="block px-3 py-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              Products
-            </Link>
-            <Link
-              to="/about"
-              className="block px-3 py-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className="block px-3 py-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-            >
-              Contact
-            </Link>
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="flex items-center px-5 space-x-4">
-              <Link
-                to="/login"
-                className="block px-3 py-2 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="block px-3 py-2 rounded-md bg-primary text-white hover:bg-primary/90"
-              >
-                Register
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
