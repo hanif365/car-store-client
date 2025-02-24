@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { selectCurrentToken, logout } from "@/redux/features/auth/authSlice";
+import {
+  selectCurrentToken,
+  logout,
+  selectCurrentUser,
+} from "@/redux/features/auth/authSlice";
 import "./Navbar.css";
 import { FaEquals, FaXmark } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -11,6 +15,8 @@ const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [showShadow, setShowShadow] = useState(false);
   const token = useAppSelector(selectCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
+  console.log("user", user);
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -129,7 +135,7 @@ const Navbar = () => {
                   }`}
                 >
                   <Link
-                    to="/dashboard"
+                    to={`/${user?.role}/dashboard`}
                     className={
                       location.pathname === "/dashboard"
                         ? ""

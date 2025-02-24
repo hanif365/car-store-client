@@ -39,8 +39,8 @@ const LoginForm = () => {
       toast.success("Logged in successfully", { id: toastId, duration: 2000 });
       localStorage.setItem('token', result?.data?.accessToken);
 
-      navigate('/dashboard');
-      // navigate(`/${user?.role}/dashboard`);
+      // navigate('/dashboard');
+      navigate(`/${user?.role}/dashboard`);
     } catch (error: any ) {
       setLoginError(error.data.message || 'Invalid email or password');
     }

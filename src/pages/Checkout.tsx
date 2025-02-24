@@ -72,16 +72,16 @@ const Checkout = () => {
   ]);
 
   // Prevent showing empty cart message if order is being processed
-  if (cartData.items.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
-          {/* <Button onClick={() => navigate("/")}>Continue Shopping</Button> */}
-        </div>
-      </div>
-    );
-  }
+  //   if (cartData.items.length === 0) {
+  //     return (
+  //       <div className="container mx-auto px-4 py-8">
+  //         <div className="text-center">
+  //           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
+  //           {/* <Button onClick={() => navigate("/")}>Continue Shopping</Button> */}
+  //         </div>
+  //       </div>
+  //     );
+  //   }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -141,7 +141,7 @@ const Checkout = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Processing..." : "Place Order"}
+              {isLoading ? "Processing..." : "Order Now"}
             </Button>
           </form>
         </div>

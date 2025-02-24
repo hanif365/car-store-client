@@ -12,6 +12,15 @@ import ProductDetails from "@/pages/ProductDetails";
 import About from "@/pages/About";
 import Checkout from "@/pages/Checkout";
 import OrderDetails from "@/pages/OrderDetails";
+import AdminDashboardLayout from "@/pages/dashboard/AdminDashboardLayout/AdminDashboardLayout";
+import UserManagement from "@/pages/dashboard/AdminDashboardLayout/UserManagement";
+import Overviews from "@/pages/dashboard/AdminDashboardLayout/Overviews";
+import ProductsManagement from "@/pages/dashboard/AdminDashboardLayout/ProductsManagement";
+import OrderManagement from "@/pages/dashboard/AdminDashboardLayout/OrderManagement";
+import ProfileManagement from "@/pages/dashboard/AdminDashboardLayout/ProfileManagement";
+import UserDashboardLayout from "@/pages/dashboard/UserDashboardLayout/UserDashboardLayout";
+// import ProductManagement from "@/pages/ProductManagement";
+// import OrderManagement from "@/pages/OrderManagement";
 
 const router = createBrowserRouter([
   {
@@ -66,18 +75,61 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "/admin/dashboard",
+        element: (
+          <ProtectedRoute roles={[USER_ROLES.ADMIN]}>
+            <AdminDashboardLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Overviews />,
+          },
+          {
+            path: "users",
+            element: <UserManagement />,
+          },
+
+          {
+            path: "products",
+            element: <ProductsManagement />,
+          },
+          {
+            path: "orders",
+            element: <OrderManagement />,
+          },
+          {
+            path: "profile",
+            element: <ProfileManagement />,
+          },
+        ],
+      },
+      {
+        path: "/user/dashboard",
+        element: (
+          <ProtectedRoute roles={[USER_ROLES.USER]}>
+            <UserDashboardLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Overviews />,
+          },
+          {
+            path: "orders",
+            element: <OrderManagement />,
+          },
+          {
+            path: "profile",
+            element: <ProfileManagement />,
+          },
+        ],
+      },
     ],
   },
-  //   {
-  //     path: "/dashboard",
-  //     element: <Dashboard />,
-  //     children: [
-  //       {
-  //         path: "/dashboard",
-  //         element: <Dashboard />,
-  //       },
-  //     ],
-  //   },
 ]);
 
 export default router;

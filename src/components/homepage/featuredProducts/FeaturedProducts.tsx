@@ -49,6 +49,8 @@ const FeaturedProducts = () => {
                 <div>
                 <h3 className="text-xl font-semibold">{product.name}</h3>
                 <p className="text-gray-600">{product.brand}</p>
+                <h3 className="text-xl font-semibold">{product.model}</h3>
+                <p className="text-gray-600">{product.category}</p>
                 </div>
                 
                 <div>
