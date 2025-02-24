@@ -4,6 +4,7 @@ import { selectCurrentToken, logout } from "@/redux/features/auth/authSlice";
 import "./Navbar.css";
 import { FaEquals, FaXmark } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import CartSheet from "../CartSheet/CartSheet";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
@@ -56,6 +57,7 @@ const Navbar = () => {
             </Link>
 
             <div className="md:hidden">
+              <CartSheet />
               <button
                 className="text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
                 onClick={() => setNavbar(!navbar)}
@@ -99,6 +101,10 @@ const Navbar = () => {
                 >
                   About
                 </Link>
+              </li>
+
+              <li className="text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out"> 
+                <CartSheet />
               </li>
 
               {token ? (
