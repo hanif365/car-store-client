@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Badge } from "@/components/ui/badge";
 import {
   removeFromCart,
   updateQuantity,
@@ -30,16 +29,22 @@ const CartSheet = () => {
         <Button variant="link" className="relative">
           <FaShoppingCart />
 
-          <Badge className="absolute right-0 top-0 bg-red-600 text-white rounded-full text-xs p-1">
-            {cartData.totalQuantity}
-          </Badge>
-          {/* <p className=" font-extrabold absolute top-0 right-0   text-red-600"> {cartData.totalQuantity}</p> */}
+          {cartData.totalQuantity ? (
+            <p className=" absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+              {" "}
+              {cartData.totalQuantity}
+            </p>
+          ) : (
+            ""
+          )}
         </Button>
       </SheetTrigger>
 
       <SheetContent className="flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg max-w-md">
         <SheetHeader className="border-b pb-4">
-          <SheetTitle className="text-xl font-semibold">Your Shopping Cart</SheetTitle>
+          <SheetTitle className="text-xl font-semibold">
+            Your Shopping Cart
+          </SheetTitle>
           <SheetDescription className="text-sm text-gray-500">
             Please review your selected items before proceeding to checkout.
           </SheetDescription>

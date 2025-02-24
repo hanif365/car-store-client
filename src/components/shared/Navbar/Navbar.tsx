@@ -52,12 +52,17 @@ const Navbar = () => {
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/car-store.png" alt="CarStore Logo" className="w-6 h-6" />
-              <span className="text-xl font-bold text-[#00095E] hidden md:block">CarStore</span>
+              <img
+                src="/car-store.png"
+                alt="CarStore Logo"
+                className="w-6 h-6"
+              />
+              <span className="text-xl font-bold text-[#00095E] hidden md:block">
+                CarStore
+              </span>
             </Link>
 
             <div className="md:hidden">
-              <CartSheet />
               <button
                 className="text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
                 onClick={() => setNavbar(!navbar)}
@@ -79,24 +84,36 @@ const Navbar = () => {
             }`}
           >
             <ul className="h-screen md:h-auto items-center justify-center md:flex">
-              <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
-                location.pathname === "/" ? "text-[#7EA0FF]" : "text-[#00095E]"
-              }`}>
+              <li
+                className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                  location.pathname === "/"
+                    ? "text-[#7EA0FF]"
+                    : "text-[#00095E]"
+                }`}
+              >
                 <Link
                   to="/"
-                  className={location.pathname === "/" ? "" : "underline_design"}
+                  className={
+                    location.pathname === "/" ? "" : "underline_design"
+                  }
                   onClick={() => setNavbar(false)}
                 >
                   Home
                 </Link>
               </li>
 
-              <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
-                location.pathname === "/about" ? "text-[#7EA0FF]" : "text-[#00095E]"
-              }`}>
+              <li
+                className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                  location.pathname === "/about"
+                    ? "text-[#7EA0FF]"
+                    : "text-[#00095E]"
+                }`}
+              >
                 <Link
                   to="/about"
-                  className={location.pathname === "/about" ? "" : "underline_design"}
+                  className={
+                    location.pathname === "/about" ? "" : "underline_design"
+                  }
                   onClick={() => setNavbar(false)}
                 >
                   About
@@ -104,12 +121,20 @@ const Navbar = () => {
               </li>
 
               {token && (
-                <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
-                  location.pathname === "/dashboard" ? "text-[#7EA0FF]" : "text-[#00095E]"
-                }`}>
+                <li
+                  className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                    location.pathname === "/dashboard"
+                      ? "text-[#7EA0FF]"
+                      : "text-[#00095E]"
+                  }`}
+                >
                   <Link
                     to="/dashboard"
-                    className={location.pathname === "/dashboard" ? "" : "underline_design"}
+                    className={
+                      location.pathname === "/dashboard"
+                        ? ""
+                        : "underline_design"
+                    }
                     onClick={() => setNavbar(false)}
                   >
                     Dashboard
@@ -117,7 +142,7 @@ const Navbar = () => {
                 </li>
               )}
 
-              <li className="text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out"> 
+              <li className="text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out">
                 <CartSheet />
               </li>
 
