@@ -7,24 +7,25 @@ import { verifyToken } from "../utils/verifyToken";
 
 type TProtectedRoute = {
   children: ReactNode;
-  role: string | undefined;
+  roles: string[] | undefined; // Changed to accept multiple roles
 };
 
-const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
+const ProtectedRoute = ({ children, roles }: TProtectedRoute) => {
   const token = useAppSelector(selectCurrentToken);
 
-  let user;
+  let loginUser;
 
   if (token) {
-    user = verifyToken(token);
+    loginUser = verifyToken(token);
   }
 
-  console.log("user from ProtectedRoute", user);
+  console.log("loginUser from ProtectedRoute", loginUser);
   console.log("token from ProtectedRoute", token);
 
   const dispatch = useAppDispatch();
 
-  if (role !== undefined && role !== user?.role) {
+  // check user role is in the allowed roles
+  if (roles !== undefined && !roles.includes(loginUser?.role)) {
     dispatch(logout());
     return <Navigate to="/login" replace={true} />;
   }

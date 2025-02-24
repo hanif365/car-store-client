@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/features/products/productsApi";    
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/redux/hooks";
 import { setAllProducts } from "@/redux/features/products/productsSlice"; 
 
 const FeaturedProducts = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: productsData, error, isLoading } = useGetProductsQuery({});
   
   console.log("products", productsData);

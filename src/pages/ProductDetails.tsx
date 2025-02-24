@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { selectAllProducts } from "@/redux/features/products/productsSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-import { toast } from "sonner";
 
 const ProductDetails = () => {
   const { id } = useParams();

@@ -10,6 +10,8 @@ import { USER_ROLES } from "../constants/global";
 import AllProducts from "@/pages/AllProducts";
 import ProductDetails from "@/pages/ProductDetails";
 import About from "@/pages/About";
+import Checkout from "@/pages/Checkout";
+import OrderDetails from "@/pages/OrderDetails";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +37,7 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <ProtectedRoute role={USER_ROLES.USER}>
+          <ProtectedRoute roles={[USER_ROLES.USER, USER_ROLES.ADMIN]}>
             <Dashboard />
           </ProtectedRoute>
         ),
@@ -47,6 +49,22 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/checkout",
+        element: (
+          <ProtectedRoute roles={[USER_ROLES.USER, USER_ROLES.ADMIN]}>
+            <Checkout />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/order/verification",
+        element: (
+          <ProtectedRoute roles={[USER_ROLES.USER, USER_ROLES.ADMIN]}>
+            <OrderDetails />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

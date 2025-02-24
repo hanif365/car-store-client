@@ -2,12 +2,12 @@
 import  { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../../../redux/features/auth/authApi';
-import { setUser } from '../../../redux/features/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { useLoginMutation } from '@/redux/features/auth/authApi';
+import { setUser } from '@/redux/features/auth/authSlice';
+import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'sonner';
 import verifyToken from '@/utils/verifyToken';
-import { TUser } from '../../../redux/features/auth/authSlice';
+import { TUser } from '@/redux/features/auth/authSlice';
 import { Link } from 'react-router-dom';
 
 interface LoginFormData {
@@ -18,7 +18,7 @@ interface LoginFormData {
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
 
