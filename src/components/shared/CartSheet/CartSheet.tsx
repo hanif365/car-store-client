@@ -10,60 +10,19 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-// import { useEffect } from "react";
-// import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import {
   removeFromCart,
   updateQuantity,
 } from "@/redux/features/cart/cartSlice";
 import { FaShoppingCart } from "react-icons/fa";
-// import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
+
 import { useNavigate } from "react-router-dom";
 
 const CartSheet = () => {
   const dispatch = useAppDispatch();
   const cartData = useAppSelector((state) => state.cart);
   const navigate = useNavigate();
-
-  //   const [createOrder, { isLoading, isSuccess, data, isError, error }] =
-  //     useCreateOrderMutation();
-
-  //   const handlePlaceOrder = async () => {
-  //     try {
-  //       const orderData = {
-  //         items: cartData.items.map(item => ({
-  //           product: item._id,
-  //           quantity: item.quantity,
-  //         })),
-  //         address: "Pabna Sader, test2", // Replace with actual address if needed
-  //         contactNo: "01712345668", // Replace with actual contact number if needed
-  //         city: "Pabna", // Replace with actual city if needed
-  //       };
-
-  //       console.log("cartData from handlePlaceOrder", { orderData });
-  //       await createOrder(orderData).unwrap();
-  //       toast.success("Order placed successfully!");
-  //     } catch (error) {
-  //       toast.error("Failed to place order: " + error?.message);
-  //     }
-  //   };
-
-  //   const toastId = "cart";
-  //   useEffect(() => {
-  //     if (isLoading) toast.loading("Processing ...", { id: toastId });
-
-  //     if (isSuccess) {
-  //       toast.success(data?.message, { id: toastId });
-  //       if (data?.data) {
-  //         setTimeout(() => {
-  //           window.location.href = data.data;
-  //         }, 1000);
-  //       }
-  //     }
-
-  //     if (isError) toast.error(JSON.stringify(error), { id: toastId });
-  //   }, [data?.data, data?.message, error, isError, isLoading, isSuccess]);
 
   return (
     <Sheet>
@@ -80,9 +39,9 @@ const CartSheet = () => {
 
       <SheetContent className="flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg max-w-md">
         <SheetHeader className="border-b pb-4">
-          <SheetTitle className="text-xl font-semibold">Your Cart</SheetTitle>
+          <SheetTitle className="text-xl font-semibold">Your Shopping Cart</SheetTitle>
           <SheetDescription className="text-sm text-gray-500">
-            Review your items and proceed to checkout.
+            Please review your selected items before proceeding to checkout.
           </SheetDescription>
         </SheetHeader>
 

@@ -46,7 +46,7 @@ const Navbar = () => {
             ? "md:translate-y-0 w-full bg-white fixed top-0 left-0 right-0 z-50 shadow-md"
             : "translate-y-0 w-full bg-white md:bg-transparent fixed top-0 left-0 right-0 z-50"
           : "w-full bg-white top-0 left-0 right-0 z-50 fixed md:-translate-y-full"
-      } transform transition-all duration-1000 pt-5`}
+      } transform transition-all duration-1000 py-2`}
     >
       <div className="justify-between px-4 mx-auto lg:max-w-7xl 2xl:max-w-48xl md:items-center md:flex md:px-8">
         <div>
@@ -102,6 +102,20 @@ const Navbar = () => {
                   About
                 </Link>
               </li>
+
+              {token && (
+                <li className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                  location.pathname === "/dashboard" ? "text-[#7EA0FF]" : "text-[#00095E]"
+                }`}>
+                  <Link
+                    to="/dashboard"
+                    className={location.pathname === "/dashboard" ? "" : "underline_design"}
+                    onClick={() => setNavbar(false)}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+              )}
 
               <li className="text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out"> 
                 <CartSheet />

@@ -12,7 +12,7 @@ const AllProducts = () => {
   return (
     <div className="container mx-auto px-4 py-20">
       <h2 className="text-3xl font-bold text-center mb-10">All Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {products?.map((product) => (
           <div key={product._id} className="group border rounded-lg overflow-hidden shadow-lg">
             <div className="relative h-48 overflow-hidden">
