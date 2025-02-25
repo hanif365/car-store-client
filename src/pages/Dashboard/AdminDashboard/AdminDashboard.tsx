@@ -1,4 +1,5 @@
 import { logout } from "@/redux/features/auth/authSlice";
+import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
@@ -6,6 +7,11 @@ import { Link, Outlet } from "react-router-dom";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearCart());    
+  };
 
 
   return (
@@ -78,7 +84,7 @@ const AdminDashboard = () => {
               <Link
                 to="/"
                 className={`block py-3 px-4 rounded-lg  font-semibold hover:bg-red-100 hover:text-[#0062ffb9]`}
-                onClick={() => dispatch(logout())}
+                onClick={handleLogout}
               >
                 Logout
               </Link>

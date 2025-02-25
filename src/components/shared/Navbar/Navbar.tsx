@@ -8,7 +8,8 @@ import {
 import "./Navbar.css";
 import { FaEquals, FaXmark } from "react-icons/fa6";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import CartSheet from "../CartSheet/CartSheet";
+import CartSheet from "@/components/Shared/CartSheet/CartSheet";
+import { clearCart } from "@/redux/features/cart/cartSlice";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
@@ -22,6 +23,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearCart());    
     setNavbar(false);
   };
 
