@@ -1,26 +1,29 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Login from "../pages/AuthManagementPage/LoginPage";
+import Register from "../pages/AuthManagementPage/RegisterPage";
 
-import Dashboard from "../pages/Dashboard";
-import Homepage from "../pages/Homepage";
+import Homepage from "../pages/Homepage/Homepage";
 import ProtectedRoute from "../layouts/ProtectedRoute";
 import { USER_ROLES } from "../constants/global";
-import AllProducts from "@/pages/AllProducts";
-import ProductDetails from "@/pages/ProductDetails";
-import About from "@/pages/About";
-import Checkout from "@/pages/Checkout";
-import OrderDetails from "@/pages/OrderDetails";
-import AdminDashboardLayout from "@/pages/dashboard/AdminDashboardLayout/AdminDashboardLayout";
-import UserManagement from "@/pages/dashboard/AdminDashboardLayout/UserManagement";
-import Overviews from "@/pages/dashboard/AdminDashboardLayout/Overviews";
-import ProductsManagement from "@/pages/dashboard/AdminDashboardLayout/ProductsManagement";
-import OrderManagement from "@/pages/dashboard/AdminDashboardLayout/OrderManagement";
-import ProfileManagement from "@/pages/dashboard/AdminDashboardLayout/ProfileManagement";
-import UserDashboardLayout from "@/pages/dashboard/UserDashboardLayout/UserDashboardLayout";
-// import ProductManagement from "@/pages/ProductManagement";
-// import OrderManagement from "@/pages/OrderManagement";
+import AllProducts from "@/pages/ProductManagementPage/AllProductPage/AllProductPage";
+import ProductDetails from "@/pages/ProductManagementPage/ProductDetailsPage/ProductDetailsPage";
+import About from "@/pages/AboutPage/AboutPage";
+import Checkout from "@/pages/CheckoutPage/CheckoutPage";
+import OrderDetails from "@/pages/OrderManagementPage/OrderDetailsPage";
+
+import AdminUserManagement from "@/components/Dashboard/AdminDashboard/UserManagement";
+import AdminOverviews from "@/components/Dashboard/AdminDashboard/Overviews";
+import AdminProductsManagement from "@/components/Dashboard/AdminDashboard/ProductsManagement";
+import AdminOrderManagement from "@/components/Dashboard/AdminDashboard/OrderManagement";
+import AdminProfileManagement from "@/components/Dashboard/AdminDashboard/ProfileManagement";
+
+import UserOrderManagement from "@/components/Dashboard/UserDashboard/OrderManagement";
+import UserOverviews from "@/components/Dashboard/UserDashboard/Overviews";
+import UserProfileManagement from "@/components/Dashboard/UserDashboard/ProfileManagement";
+
+import AdminDashboard from "@/pages/Dashboard/AdminDashboard/AdminDashboard";
+import UserDashboard from "@/pages/Dashboard/UserDashboard/UserDashboard";
 
 const router = createBrowserRouter([
   {
@@ -43,14 +46,7 @@ const router = createBrowserRouter([
         path: "/all-products",
         element: <AllProducts />,
       },
-      {
-        path: "/dashboard",
-        element: (
-          <ProtectedRoute roles={[USER_ROLES.USER, USER_ROLES.ADMIN]}>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
-      },
+   
       {
         path: "/products/:id",
         element: <ProductDetails />,
@@ -79,30 +75,30 @@ const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: (
           <ProtectedRoute roles={[USER_ROLES.ADMIN]}>
-            <AdminDashboardLayout />
+            <AdminDashboard />
           </ProtectedRoute>
         ),
         children: [
           {
             index: true,
-            element: <Overviews />,
+            element: <AdminOverviews />,
           },
           {
             path: "users",
-            element: <UserManagement />,
+            element: <AdminUserManagement />,
           },
 
           {
             path: "products",
-            element: <ProductsManagement />,
+            element: <AdminProductsManagement />,
           },
           {
             path: "orders",
-            element: <OrderManagement />,
+            element: <AdminOrderManagement />,
           },
           {
             path: "profile",
-            element: <ProfileManagement />,
+            element: <AdminProfileManagement />,
           },
         ],
       },
@@ -110,21 +106,21 @@ const router = createBrowserRouter([
         path: "/user/dashboard",
         element: (
           <ProtectedRoute roles={[USER_ROLES.USER]}>
-            <UserDashboardLayout />
+            <UserDashboard />
           </ProtectedRoute>
         ),
         children: [
           {
             index: true,
-            element: <Overviews />,
+            element: <UserOverviews />,
           },
           {
             path: "orders",
-            element: <OrderManagement />,
+            element: <UserOrderManagement />,
           },
           {
             path: "profile",
-            element: <ProfileManagement />,
+            element: <UserProfileManagement />,
           },
         ],
       },

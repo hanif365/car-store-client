@@ -1,6 +1,6 @@
-import LoginForm from "../components/auth/login/LoginForm";
+import LoginForm from "@/components/Auth/Login/LoginForm";
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <div>
         <h1 className="text-2xl font-bold">Login page</h1>
@@ -9,4 +9,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginPage;

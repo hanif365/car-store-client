@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-const AdminDashboardLayout = () => {
+const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
 
@@ -93,4 +93,4 @@ const AdminDashboardLayout = () => {
   );
 };
 
-export default AdminDashboardLayout;
+export default AdminDashboard;

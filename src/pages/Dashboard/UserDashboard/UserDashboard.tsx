@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-const UserDashboardLayout = () => {
+const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("");
 
   return (
@@ -54,4 +54,4 @@ const UserDashboardLayout = () => {
   );
 };
 
-export default UserDashboardLayout;
+export default UserDashboard;

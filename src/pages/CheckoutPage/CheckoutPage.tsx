@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
 import { Button } from "@/components/ui/button";
@@ -7,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { clearCart } from "@/redux/features/cart/cartSlice";
 
-const Checkout = () => {
-  const navigate = useNavigate();
+const CheckoutPage = () => {
   const dispatch = useAppDispatch();
   const cartData = useAppSelector((state) => state.cart);
   const [createOrder, { isLoading, isSuccess, data, isError, error }] =
@@ -150,4 +148,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutPage;

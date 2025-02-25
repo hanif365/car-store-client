@@ -1,8 +1,11 @@
-import { selectAllProducts, selectProductsMeta } from "@/redux/features/products/productsSlice";
+import {
+  selectAllProducts,
+  selectProductsMeta,
+} from "@/redux/features/products/productsSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { Link } from "react-router-dom";
 
-const AllProducts = () => {
+const AllProductPage = () => {
   const products = useAppSelector(selectAllProducts);
   const meta = useAppSelector(selectProductsMeta);
 
@@ -14,7 +17,10 @@ const AllProducts = () => {
       <h2 className="text-3xl font-bold text-center mb-10">All Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {products?.map((product) => (
-          <div key={product._id} className="group border rounded-lg overflow-hidden shadow-lg">
+          <div
+            key={product._id}
+            className="group border rounded-lg overflow-hidden shadow-lg"
+          >
             <div className="relative h-48 overflow-hidden">
               <img
                 src={product.image}
@@ -47,4 +53,4 @@ const AllProducts = () => {
   );
 };
 
-export default AllProducts;
+export default AllProductPage;

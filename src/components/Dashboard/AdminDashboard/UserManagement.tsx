@@ -1,9 +1,9 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+// import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 // import { fetchUsers, deleteUser } from "@/redux/features/user/userApi"; // Adjust the import based on your structure
 
 const UserManagement = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 //   const users = useAppSelector((state) => state.user.users);
 
 //   React.useEffect(() => {

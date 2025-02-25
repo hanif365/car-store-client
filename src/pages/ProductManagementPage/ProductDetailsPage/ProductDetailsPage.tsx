@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { selectAllProducts } from "@/redux/features/products/productsSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 
-const ProductDetails = () => {
+const ProductDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectAllProducts);
@@ -79,4 +79,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default ProductDetailsPage;

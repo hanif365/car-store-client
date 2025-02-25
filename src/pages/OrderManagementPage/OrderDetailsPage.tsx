@@ -2,15 +2,17 @@
 import { useLocation } from "react-router-dom";
 import { useVerifyOrderQuery } from "@/redux/features/order/orderApi";
 import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable"; 
+import autoTable from "jspdf-autotable";
 
-const OrderDetails = () => {
+const OrderDetailsPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const order_id = queryParams.get("order_id");
   const { data, isLoading } = useVerifyOrderQuery(order_id);
 
   const orderData = data?.data[0];
+
+  console.log("orderData : ", orderData);
 
   const downloadPDF = () => {
     const doc = new jsPDF();
@@ -25,23 +27,27 @@ const OrderDetails = () => {
     yPos += 8;
     doc.text(`Invoice #${orderData.invoice_no}`, 14, yPos);
     yPos += 8;
-    doc.text(`Date: ${new Date(orderData.date_time).toLocaleDateString()}`, 14, yPos);
+    doc.text(
+      `Date: ${new Date(orderData.date_time).toLocaleDateString()}`,
+      14,
+      yPos
+    );
     yPos += 20;
 
     // Bill To & Payment Details in two columns
     autoTable(doc, {
       startY: yPos,
-      theme: 'grid',
+      theme: "grid",
       body: [
         [
-          { 
-            content: 'Bill To:',
-            styles: { fontStyle: 'bold', fontSize: 14 } 
+          {
+            content: "Bill To:",
+            styles: { fontStyle: "bold", fontSize: 14 },
           },
-          { 
-            content: 'Payment Details:',
-            styles: { fontStyle: 'bold', fontSize: 14 } 
-          }
+          {
+            content: "Payment Details:",
+            styles: { fontStyle: "bold", fontSize: 14 },
+          },
         ],
         [
           [
@@ -49,21 +55,21 @@ const OrderDetails = () => {
             orderData.email,
             orderData.phone_no,
             orderData.address,
-            orderData.city
-          ].join('\n'),
+            orderData.city,
+          ].join("\n"),
           [
             `Status: ${orderData.bank_status}`,
             `Method: ${orderData.method}`,
             `Transaction ID: ${orderData.bank_trx_id}`,
-            `Order ID: ${orderData.order_id}`
-          ].join('\n')
-        ]
+            `Order ID: ${orderData.order_id}`,
+          ].join("\n"),
+        ],
       ],
       columnStyles: {
-        0: { cellWidth: 90, halign: 'left' },
-        1: { cellWidth: 90, halign: 'left' }
+        0: { cellWidth: 90, halign: "left" },
+        1: { cellWidth: 90, halign: "left" },
       },
-      styles: { fontSize: 12, cellPadding: 2 }
+      styles: { fontSize: 12, cellPadding: 2 },
     });
 
     yPos = (doc as any).lastAutoTable.finalY + 10; // Cast to any to avoid TypeScript error
@@ -71,30 +77,34 @@ const OrderDetails = () => {
     // Transaction Details
     autoTable(doc, {
       startY: yPos,
-      theme: 'grid',
+      theme: "grid",
       body: [
         [
-          { 
-            content: 'Transaction Details',
+          {
+            content: "Transaction Details",
             colSpan: 2,
-            styles: { fontStyle: 'bold', fontSize: 14 } 
-          }
+            styles: { fontStyle: "bold", fontSize: 14 },
+          },
         ],
-        ['SP Code:', orderData.sp_code],
-        ['SP Message:', orderData.sp_message]
+        ["SP Code:", orderData.sp_code],
+        ["SP Message:", orderData.sp_message],
       ],
       columnStyles: {
-        0: { cellWidth: 50, halign: 'left' },
-        1: { cellWidth: 130, halign: 'left' }
+        0: { cellWidth: 50, halign: "left" },
+        1: { cellWidth: 130, halign: "left" },
       },
-      styles: { fontSize: 12, cellPadding: 2 }
+      styles: { fontSize: 12, cellPadding: 2 },
     });
 
     yPos = (doc as any).lastAutoTable.finalY + 15; // Cast to any to avoid TypeScript error
 
     // Transaction Time
     doc.setFontSize(12);
-    doc.text(`Transaction Time: ${new Date(orderData.date_time).toLocaleTimeString()}`, 14, yPos);
+    doc.text(
+      `Transaction Time: ${new Date(orderData.date_time).toLocaleTimeString()}`,
+      14,
+      yPos
+    );
     yPos += 10;
 
     // Thank you message
@@ -116,7 +126,10 @@ const OrderDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
-      <button onClick={downloadPDF} className="mb-4 p-2 bg-blue-600 text-white rounded">
+      <button
+        onClick={downloadPDF}
+        className="mb-4 p-2 bg-blue-600 text-white rounded"
+      >
         Download PDF
       </button>
       <div className="flex justify-between items-start mb-8 border-b pb-6">
@@ -152,20 +165,22 @@ const OrderDetails = () => {
           <div className="text-gray-600">
             <div className="grid grid-cols-2 gap-2">
               <p className="font-medium">Status:</p>
-              <p className={`${
-                orderData.bank_status === "Success"
-                  ? "text-green-600"
-                  : "text-red-600"
-              } font-semibold`}>
+              <p
+                className={`${
+                  orderData.bank_status === "Success"
+                    ? "text-green-600"
+                    : "text-red-600"
+                } font-semibold`}
+              >
                 {orderData.bank_status}
               </p>
-              
+
               <p className="font-medium">Method:</p>
               <p>{orderData.method}</p>
-              
+
               <p className="font-medium">Transaction ID:</p>
               <p>{orderData.bank_trx_id}</p>
-              
+
               <p className="font-medium">Order ID:</p>
               <p>{orderData.order_id}</p>
             </div>
@@ -207,4 +222,4 @@ const OrderDetails = () => {
   );
 };
 
-export default OrderDetails;
+export default OrderDetailsPage;
