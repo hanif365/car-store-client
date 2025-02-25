@@ -1,18 +1,28 @@
 import { logout } from "@/redux/features/auth/authSlice";
 import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/hooks";
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const UserDashboard = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Extract the last part of the path to set the active tab
+    const path = location.pathname.split('/').pop();
+    if (path === 'dashboard' || !path) {
+      setActiveTab('overviews');
+    } else {
+      setActiveTab(path);
+    }
+  }, [location.pathname]);
 
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearCart());    
   };
-
 
   return (
     <div className="flex">
@@ -24,7 +34,7 @@ const UserDashboard = () => {
               <Link
                 to="/user/dashboard"
                 className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "overviews" || activeTab === ""
+                  activeTab === "overviews"
                     ? "bg-[#D5E6FB] text-[#0060FF]"
                     : ""
                 }`}
@@ -37,9 +47,9 @@ const UserDashboard = () => {
               <Link
                 to="/user/dashboard/orders"
                 className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "products" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
+                  activeTab === "orders" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
                 }`}
-                onClick={() => setActiveTab("products")}
+                onClick={() => setActiveTab("orders")}
               >
                 Orders
               </Link>
@@ -48,9 +58,9 @@ const UserDashboard = () => {
               <Link
                 to="/user/dashboard/profile"
                 className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "orders" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
+                  activeTab === "profile" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
                 }`}
-                onClick={() => setActiveTab("orders")}
+                onClick={() => setActiveTab("profile")}
               >
                 Profile
               </Link>
