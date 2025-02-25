@@ -1,12 +1,16 @@
 import "./App.css";
-import Navbar from "./components/shared/Navbar/Navbar";
-import { Outlet } from "react-router-dom";
+import Navbar from "./components/Shared/Navbar/Navbar";
+import { Outlet, useLocation } from "react-router-dom";
 
 function App() {
+  const location = useLocation();
+  const urlPath = location.pathname.split("/");
+  const isDashboard = urlPath.includes("dashboard");
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 pt-20">
+      {!isDashboard && <Navbar />}
+      <main className="flex-1">
         <Outlet />
       </main>
     </div>

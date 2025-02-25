@@ -12,15 +12,15 @@ import About from "@/pages/AboutPage/AboutPage";
 import Checkout from "@/pages/CheckoutPage/CheckoutPage";
 import OrderDetails from "@/pages/OrderManagementPage/OrderDetailsPage";
 
-import AdminUserManagement from "@/components/Dashboard/AdminDashboard/UserManagement";
-import AdminOverviews from "@/components/Dashboard/AdminDashboard/Overviews";
-import AdminProductsManagement from "@/components/Dashboard/AdminDashboard/ProductsManagement";
-import AdminOrderManagement from "@/components/Dashboard/AdminDashboard/OrderManagement";
-import AdminProfileManagement from "@/components/Dashboard/AdminDashboard/ProfileManagement";
+import AdminUserManagement from "@/components/Dashboard/AdminDashboard/UserManagement/UserManagement";
+import AdminOverviews from "@/components/Dashboard/AdminDashboard/Overviews/Overviews";
+import AdminProductsManagement from "@/components/Dashboard/AdminDashboard/ProductsManagement/ProductsManagement";
+import AdminOrderManagement from "@/components/Dashboard/AdminDashboard/OrderManagement/OrderManagement";
+import AdminProfileManagement from "@/components/Dashboard/AdminDashboard/ProfileManagement/ProfileManagement";
 
-import UserOrderManagement from "@/components/Dashboard/UserDashboard/OrderManagement";
-import UserOverviews from "@/components/Dashboard/UserDashboard/Overviews";
-import UserProfileManagement from "@/components/Dashboard/UserDashboard/ProfileManagement";
+import UserOrderManagement from "@/components/Dashboard/UserDashboard/OrderManagement/OrderManagement";
+import UserOverviews from "@/components/Dashboard/UserDashboard/Overviews/Overviews";
+import UserProfileManagement from "@/components/Dashboard/UserDashboard/ProfileManagement/ProfileManagement";
 
 import AdminDashboard from "@/pages/Dashboard/AdminDashboard/AdminDashboard";
 import UserDashboard from "@/pages/Dashboard/UserDashboard/UserDashboard";

@@ -61,7 +61,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="/car-store.png"
+                src="/car-store1.png"
                 alt="CarStore Logo"
                 className="w-6 h-6"
               />

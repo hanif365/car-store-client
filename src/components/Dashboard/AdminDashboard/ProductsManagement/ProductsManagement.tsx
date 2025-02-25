@@ -21,7 +21,7 @@ interface IProductForm {
 }
 
 interface IProduct extends IProductForm {
-  _id: string; // Add _id to the product interface
+  _id: string;
 }
 
 const ProductsManagement = () => {
@@ -100,9 +100,9 @@ const ProductsManagement = () => {
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
-        className="mb-8 space-y-4 max-w-2xl"
+        className="mb-8 space-y-4 w-full"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           <div>
             <input
               type="text"
@@ -226,7 +226,8 @@ const ProductsManagement = () => {
         <div>
           <textarea
             placeholder="Description"
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full h-32"
+            rows={4}
             {...register("description", {
               required: "Description is required",
             })}

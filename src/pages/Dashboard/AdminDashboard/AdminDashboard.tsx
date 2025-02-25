@@ -12,88 +12,49 @@ const AdminDashboard = () => {
   useEffect(() => {
     // Extract the last part of the path to set the active tab
     const path = location.pathname.split('/').pop();
-    if (path === 'dashboard' || !path) {
-      setActiveTab('overviews');
-    } else {
-      setActiveTab(path);
-    }
+    setActiveTab(path === 'dashboard' || !path ? 'overviews' : path);
   }, [location.pathname]);
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(clearCart());    
+    dispatch(clearCart());
   };
 
   return (
     <div className="flex">
-      <aside className="w-64 bg-white text-black p-5 overflow-y-auto h-screen">
-        <h1 className="text-2xl font-bold mb-5">Admin Dashboard</h1>
+      <aside className="fixed w-72 bg-white text-black p-5 overflow-y-auto h-screen border-gray-200 shadow-lg">
+        <h1 className="text-2xl font-bold mb-5 text-center">Admin Dashboard</h1>
         <nav>
-          <ul>
-            <li className="pb-2">
+          <ul className="space-y-2">
+            <li>
               <Link
                 to="/admin/dashboard"
-                className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "overviews"
-                    ? "bg-[#D5E6FB] text-[#0060FF]"
-                    : ""
+                className={`block py-3 px-4 rounded-lg font-semibold transition-colors duration-200 hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
+                  activeTab === "overviews" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
                 }`}
                 onClick={() => setActiveTab("overviews")}
               >
                 Overviews
               </Link>
             </li>
-            <li className="pb-2">
-              <Link
-                to="/admin/dashboard/users"
-                className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "users" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
-                }`}
-                onClick={() => setActiveTab("users")}
-              >
-                Manage Users
-              </Link>
-            </li>
-            <li className="pb-2">
-              <Link
-                to="/admin/dashboard/products"
-                className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "products" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
-                }`}
-                onClick={() => setActiveTab("products")}
-              >
-                Manage Products
-              </Link>
-            </li>
-            <li className="pb-2">
-              <Link
-                to="/admin/dashboard/orders"
-                className={`block py-3 px-4 rounded-lg font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "orders" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
-                }`}
-                onClick={() => setActiveTab("orders")}
-              >
-                Manage Orders
-              </Link>
-            </li>
-            <li className="pb-2">
-              <Link
-                to="/admin/dashboard/profile"
-                className={`block py-3 px-4 rounded-lg  font-semibold hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
-                  activeTab === "profile" ? "bg-[#D5E6FB] text-[#0060FF]" : ""
-                }`}
-                onClick={() => setActiveTab("profile")}
-              >
-                Profile
-              </Link>
-            </li>
-            <hr
-              className={`my-5 border-t-2 dark:border-[#ffffff1a] border-gray-200 mx-5 `}
-            />
-            <li className="pb-2">
+            {["users", "products", "orders", "profile"].map((tab) => (
+              <li key={tab}>
+                <Link
+                  to={`/admin/dashboard/${tab}`}
+                  className={`block py-3 px-4 rounded-lg font-semibold transition-colors duration-200 hover:bg-[#d5e6fb62] hover:text-[#0062ffb9] ${
+                    activeTab === tab ? "bg-[#D5E6FB] text-[#0060FF]" : ""
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </Link>
+              </li>
+            ))}
+            <hr className="my-5 border-t-2 border-gray-200" />
+            <li>
               <Link
                 to="/"
-                className={`block py-3 px-4 rounded-lg  font-semibold hover:bg-red-100 hover:text-[#0062ffb9]`}
+                className="block py-3 px-4 rounded-lg font-semibold text-red-600 hover:bg-red-100"
                 onClick={handleLogout}
               >
                 Logout
@@ -102,7 +63,7 @@ const AdminDashboard = () => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-5">
+      <main className="flex-1 p-5 bg-[#F5FAF8] ml-72">
         <Outlet />
       </main>
     </div>
