@@ -16,7 +16,7 @@ import AdminUserManagement from "@/components/Dashboard/AdminDashboard/UserManag
 import AdminOverviews from "@/components/Dashboard/AdminDashboard/Overviews/Overviews";
 import AdminProductsManagement from "@/components/Dashboard/AdminDashboard/ProductsManagement/ProductsManagement";
 import AdminOrderManagement from "@/components/Dashboard/AdminDashboard/OrderManagement/OrderManagement";
-// import AdminProfileManagement from "@/components/Dashboard/AdminDashboard/ProfileManagement/ProfileManagement";
+import AdminProfileManagement from "@/components/Dashboard/AdminDashboard/ProfileManagement/ProfileManagement";
 
 import UserOrderManagement from "@/components/Dashboard/UserDashboard/OrderManagement/OrderManagement";
 import UserOverviews from "@/components/Dashboard/UserDashboard/Overviews/Overviews";
@@ -96,10 +96,10 @@ const router = createBrowserRouter([
             path: "orders",
             element: <AdminOrderManagement />,
           },
-          // {
-          //   path: "profile",
-          //   element: <AdminProfileManagement />,
-          // },
+          {
+            path: "profile",
+            element: <AdminProfileManagement />,
+          },
         ],
       },
       {

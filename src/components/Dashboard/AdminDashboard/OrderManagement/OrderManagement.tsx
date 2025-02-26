@@ -59,9 +59,9 @@ const OrderManagement = () => {
         <tbody className="divide-y divide-gray-200">
           {ordersData?.data?.data?.map((order: any) => (
             <tr key={order._id}>
-              <td className="px-6 py-4">{order._id}</td>
-              <td className="px-6 py-4">{order.user.name}</td>
-              <td className="px-6 py-4">${order.totalPrice}</td>
+              <td className="px-6 py-4">{order?._id}</td>
+              <td className="px-6 py-4">{order?.user?.name}</td>
+              <td className="px-6 py-4">${order?.totalPrice}</td>
               <td
                 className={`px-6 py-4 ${
                   order.status === "Pending"

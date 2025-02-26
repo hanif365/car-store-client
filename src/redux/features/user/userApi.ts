@@ -1,6 +1,6 @@
 import { baseApi } from '@/redux/api/baseApi';
 
-export const usersApi = baseApi.injectEndpoints({
+export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => ({
@@ -17,7 +17,35 @@ export const usersApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['user'],
     }),
+    getMyProfile: builder.query({
+      query: () => ({
+        url: '/users/my-profile',
+        method: 'GET',
+      }),
+      providesTags: ['profile'],
+    }),
+    updateProfile: builder.mutation({
+      query: (data) => ({
+        url: '/users/update-profile',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['profile', 'user'],
+    }),
+    changePassword: builder.mutation({
+      query: (data) => ({
+        url: '/users/change-password',
+        method: 'PATCH',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useUpdateUserMutation } = usersApi; 
+export const {
+  useGetUsersQuery,
+  useUpdateUserMutation,
+  useGetMyProfileQuery,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
+} = userApi; 
