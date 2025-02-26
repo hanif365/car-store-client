@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useVerifyOrderQuery } from "@/redux/features/order/orderApi";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import Loader from "@/components/Shared/Loader/Loader";
 
 const OrderDetailsPage = () => {
   const location = useLocation();
@@ -126,11 +127,7 @@ const OrderDetailsPage = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+    return <Loader />;
   }
 
   if (!orderData) {

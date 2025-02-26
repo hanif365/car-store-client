@@ -8,6 +8,7 @@ import {
 } from "@/redux/features/products/productsApi";
 import { toast } from "sonner";
 import { uploadImageToImgBB } from "@/utils/imageUpload";
+import Loader from "@/components/Shared/Loader/Loader";
 
 interface IProductForm {
   name: string;
@@ -143,13 +144,11 @@ const ProductsManagement = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6">Manage Products</h2>
-
+    <div className="container mx-auto px-1 py-6 max-w-full">
       <form
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}

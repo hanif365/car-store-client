@@ -3,6 +3,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { selectAllProducts } from "@/redux/features/products/productsSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
+import Loader from "@/components/Shared/Loader/Loader";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -11,13 +12,7 @@ const ProductDetailsPage = () => {
   const cartData = useAppSelector((state) => state.cart);
 
   if (!products || products.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center text-2xl font-bold">
-          Loading products...
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   // Convert id to string for a proper match

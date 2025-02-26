@@ -3,8 +3,7 @@ import {
   useUpdateUserMutation,
 } from "@/redux/features/user/userApi";
 import { useState } from "react";
-
-// import { IUser } from "@/types/user.types";
+import Loader from "@/components/Shared/Loader/Loader";
 import { toast } from "sonner";
 
 interface User {
@@ -56,11 +55,7 @@ const UserManagement = () => {
   console.log("error", error);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        Loading users...
-      </div>
-    );
+    return <Loader />;
   }
 
   if (isError) {
@@ -72,11 +67,7 @@ const UserManagement = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-full">
-      <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
-        User Management
-      </h2>
-
+    <div className="container mx-auto px-1 py-6 max-w-full">
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full divide-y divide-gray-200">

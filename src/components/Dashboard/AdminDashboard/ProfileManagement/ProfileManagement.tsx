@@ -21,6 +21,7 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Loader from "@/components/Shared/Loader/Loader";
 
 interface ProfileForm {
   name: string;
@@ -146,18 +147,11 @@ const ProfileManagement = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-full min-h-[400px]">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
-          <p className="mt-4 text-lg text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-1 py-6 max-w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/* Profile Information Form */}
         <motion.div

@@ -5,6 +5,8 @@ import {
 } from "@/redux/features/order/orderApi";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import Loader from "@/components/Shared/Loader/Loader";
+
 
 const OrderManagement = () => {
   const { data: ordersData, isLoading } = useGetOrdersQuery(undefined, {
@@ -31,11 +33,11 @@ const OrderManagement = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto px-1 py-6 max-w-full">
       <table className="min-w-full bg-white border rounded-lg">
         <thead className="bg-gray-50">
           <tr>

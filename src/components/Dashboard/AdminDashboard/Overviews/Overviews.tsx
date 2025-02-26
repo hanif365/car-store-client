@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import SalesBarChart from "./SalesBarChart";
 import MonthlySalesDoughnut from "./MonthlySalesDoughnut";
 import RecentOrdersTable from "./RecentOrdersTable";
+import Loader from "@/components/Shared/Loader/Loader";
 
 const AdminOverviews = () => {
   const {
@@ -43,11 +44,7 @@ const AdminOverviews = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="h-[calc(100vh-160px)] flex justify-center items-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error) {
@@ -90,7 +87,7 @@ const AdminOverviews = () => {
   };
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="px-1 py-6 max-w-full">
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
         variants={containerVariants}
