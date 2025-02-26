@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import {
   useGetProductsQuery,
@@ -7,6 +7,7 @@ import {
   useDeleteProductMutation,
 } from "@/redux/features/products/productsApi";
 import { toast } from "sonner";
+import { uploadImageToImgBB } from "@/utils/imageUpload";
 
 interface IProductForm {
   name: string;
@@ -26,6 +27,10 @@ interface IProduct extends IProductForm {
 
 const ProductsManagement = () => {
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -38,17 +43,50 @@ const ProductsManagement = () => {
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
-  
+
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setImageFile(file);
+
+    // Create preview URL
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      setValue("image", "");
+    } else {
+      setImagePreview(null);
+    }
+  };
 
   const onSubmit = async (data: IProductForm) => {
     try {
-      // Convert specific fields to numbers
+      setIsUploading(true);
+
+      // Upload image file if one is selected
+      let imageUrl = data.image;
+
+      if (imageFile) {
+        toast.loading("Uploading image...");
+        imageUrl = await uploadImageToImgBB(imageFile);
+        toast.dismiss();
+      }
+
+      // Validate image URL is present
+      if (!imageUrl) {
+        toast.error("Please provide an image URL or upload an image");
+        setIsUploading(false);
+        return;
+      }
+
       const formattedData = {
         ...data,
         yearOfManufacture: Number(data.yearOfManufacture),
         price: Number(data.price),
         stock: Number(data.stock),
+        image: imageUrl,
       };
 
       if (editingProductId) {
@@ -61,10 +99,18 @@ const ProductsManagement = () => {
         await createProduct(formattedData).unwrap();
         toast.success("Product created successfully");
       }
+
       reset();
       setEditingProductId(null);
+      setImageFile(null);
+      setImagePreview(null);
     } catch (error) {
-      toast.error((error as { data?: { message?: string } })?.data?.message || "Something went wrong");
+      toast.error(
+        (error as { data?: { message?: string } })?.data?.message ||
+          "Something went wrong"
+      );
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -73,9 +119,13 @@ const ProductsManagement = () => {
     // Set form values for editing
     Object.keys(product).forEach((key) => {
       if (key in product) {
-        setValue(key as keyof IProductForm, product[key]);
+        setValue(key as keyof IProductForm, product[key as keyof IProduct]);
       }
     });
+
+    setImagePreview(product.image);
+    setImageFile(null);
+
     // Scroll to the top of the page to see the form
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -85,7 +135,10 @@ const ProductsManagement = () => {
       await deleteProduct(id).unwrap();
       toast.success("Product deleted successfully");
     } catch (error) {
-      toast.error((error as { data?: { message?: string } })?.data?.message || "Something went wrong");
+      toast.error(
+        (error as { data?: { message?: string } })?.data?.message ||
+          "Something went wrong"
+      );
     }
   };
 
@@ -102,7 +155,7 @@ const ProductsManagement = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="mb-8 space-y-4 w-full"
       >
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <input
               type="text"
@@ -207,20 +260,52 @@ const ProductsManagement = () => {
               </p>
             )}
           </div>
+        </div>
 
-          <div>
+        {/* File Upload Section */}
+        <div className="border-2 border-dashed border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors bg-white shadow-sm hover:shadow-md">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Product Image
+          </h3>
+          <div className="space-y-4">
             <input
-              type="text"
-              placeholder="Image URL"
-              className="border p-2 rounded w-full"
-              {...register("image", { required: "Image URL is required" })}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block w-full text-sm text-gray-600
+                file:mr-4 file:py-2.5 file:px-6
+                file:rounded-lg file:border-0
+                file:text-sm file:font-semibold
+                file:bg-gradient-to-r file:from-blue-600 file:to-blue-700 file:text-white
+                hover:file:from-blue-700 hover:file:to-blue-800
+                transition-all duration-200
+                cursor-pointer"
             />
-            {errors.image && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.image.message}
-              </p>
+
+            {imagePreview && (
+              <div className="mt-6 space-y-3">
+                <p className="text-sm font-medium text-gray-600">Preview</p>
+                <div className="flex justify-center items-center p-2 bg-gray-50 rounded-lg border">
+                  <img
+                    src={imagePreview}
+                    alt="Product preview"
+                    className="h-48 w-auto object-contain rounded-md shadow-sm transition-transform hover:scale-105"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 text-center mt-2">
+                  Click the button above to replace this preview
+                </p>
+              </div>
             )}
           </div>
+
+          {!imagePreview && (
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-500">
+                Recommended size: 800x600px • PNG/JPG/WebP
+              </p>
+            </div>
+          )}
         </div>
 
         <div>
@@ -241,9 +326,18 @@ const ProductsManagement = () => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          disabled={isUploading}
+          className={`px-6 py-2 rounded text-white ${
+            isUploading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          {editingProductId ? "Update Product" : "Add Product"}
+          {isUploading
+            ? "Uploading..."
+            : editingProductId
+            ? "Update Product"
+            : "Add Product"}
         </button>
       </form>
 
