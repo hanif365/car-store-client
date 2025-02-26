@@ -298,14 +298,6 @@ const ProductsManagement = () => {
               </div>
             )}
           </div>
-
-          {!imagePreview && (
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-500">
-                Recommended size: 800x600px • PNG/JPG/WebP
-              </p>
-            </div>
-          )}
         </div>
 
         <div>

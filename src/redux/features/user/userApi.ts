@@ -1,26 +1,18 @@
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from '@/redux/api/baseApi';
 
-const userApi = baseApi.injectEndpoints({
+export const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => ({
-        url: "/users",
-        method: "GET",
+        url: '/users',
+        method: 'GET',
       }),
       providesTags: ['user'],
     }),
-    updateUserStatus: builder.mutation({
+    updateUser: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/users/${id}/status`,
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: ['user'],
-    }),
-    updateUserProfile: builder.mutation({
-      query: (data) => ({
-        url: `/users/update-profile`,
-        method: "PATCH",
+        url: `/users/${id}`,
+        method: 'PATCH',
         body: data,
       }),
       invalidatesTags: ['user'],
@@ -28,8 +20,4 @@ const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetUsersQuery,
-  useUpdateUserStatusMutation,
-  useUpdateUserProfileMutation,
-} = userApi; 
+export const { useGetUsersQuery, useUpdateUserMutation } = usersApi; 
