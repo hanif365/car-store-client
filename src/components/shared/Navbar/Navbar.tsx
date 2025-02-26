@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(clearCart());    
+    dispatch(clearCart());
     setNavbar(false);
   };
 
@@ -56,7 +56,7 @@ const Navbar = () => {
           : "w-full bg-white top-0 left-0 right-0 z-50 fixed md:-translate-y-full"
       } transform transition-all duration-1000 py-2`}
     >
-      <div className="justify-between px-4 mx-auto lg:max-w-7xl 2xl:max-w-48xl md:items-center md:flex md:px-8">
+      <div className="justify-between px-4 mx-auto max-w-full md:items-center md:flex md:px-14">
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <Link to="/" className="flex items-center space-x-2">
@@ -93,7 +93,7 @@ const Navbar = () => {
           >
             <ul className="h-screen md:h-auto items-center justify-center md:flex">
               <li
-                className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
                   location.pathname === "/"
                     ? "text-[#7EA0FF]"
                     : "text-[#00095E]"
@@ -111,7 +111,7 @@ const Navbar = () => {
               </li>
 
               <li
-                className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
                   location.pathname === "/about"
                     ? "text-[#7EA0FF]"
                     : "text-[#00095E]"
@@ -130,7 +130,7 @@ const Navbar = () => {
 
               {token && (
                 <li
-                  className={`text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                  className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
                     location.pathname === "/dashboard"
                       ? "text-[#7EA0FF]"
                       : "text-[#00095E]"
@@ -150,12 +150,12 @@ const Navbar = () => {
                 </li>
               )}
 
-              <li className="text-xl font-bold py-2 md:px-6 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out">
+              <li className="text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out">
                 <CartSheet />
               </li>
 
               {token ? (
-                <li className="text-xl font-bold py-2 px-6 text-center border-b-2 md:border-b-0">
+                <li className="text-lg font-bold py-2 px-4 text-center border-b-2 md:border-b-0">
                   <button
                     onClick={handleLogout}
                     className="text-red-500 hover:text-red-600 transition duration-700 ease-in-out"
@@ -165,7 +165,7 @@ const Navbar = () => {
                 </li>
               ) : (
                 <>
-                  <li className="text-xl font-bold py-2 px-6 text-center border-b-2 md:border-b-0">
+                  <li className="text-lg font-bold py-2 px-4 text-center border-b-2 md:border-b-0">
                     <Link
                       to="/login"
                       className="text-green-500 hover:text-green-600 transition duration-700 ease-in-out"
