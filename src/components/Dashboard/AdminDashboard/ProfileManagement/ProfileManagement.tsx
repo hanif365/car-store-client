@@ -65,6 +65,8 @@ const ProfileManagement = () => {
   // Reference for password matching
   const newPassword = watch("newPassword");
 
+  console.log("profileData", profileData);
+
   // Set initial form values when profile data is loaded
   useEffect(() => {
     if (profileData?.data) {
@@ -423,6 +425,7 @@ const ProfileManagement = () => {
                 <li>Add numbers and special characters</li>
                 <li>Avoid using personal information</li>
                 <li>Don't reuse passwords across multiple sites</li>
+                <li>Don't share your password with anyone</li>
               </ul>
             </div>
 

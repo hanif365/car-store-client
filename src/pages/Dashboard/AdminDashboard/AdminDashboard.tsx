@@ -1,13 +1,16 @@
+import DashboardNavbar from "@/components/Dashboard/DashboardNavbar/DashboardNavbar";
 import { logout } from "@/redux/features/auth/authSlice";
 import { clearCart } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { selectIsSidebarOpen } from "@/redux/features/layout/layoutSlice";
 
 const AdminDashboard = () => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("");
   const dispatch = useAppDispatch();
+  const isSidebarOpen = useAppSelector(selectIsSidebarOpen);
+  const [activeTab, setActiveTab] = useState("");
 
   useEffect(() => {
     // Extract the last part of the path to set the active tab
@@ -21,8 +24,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex">
-      <aside className="fixed w-72 bg-white text-black p-5 overflow-y-auto h-screen border-gray-200 shadow-lg">
+    <div className="flex min-h-screen bg-[#F5FAF8]">
+      <aside 
+        className={`fixed top-0 left-0 h-full bg-white text-black p-5 overflow-y-auto border-r border-gray-200 shadow-lg transition-all duration-300 ${
+          isSidebarOpen ? 'w-72' : 'w-0 -translate-x-full'
+        }`}
+      >
         <h1 className="text-2xl font-bold mb-5 text-center">Admin Dashboard</h1>
         <nav>
           <ul className="space-y-2">
@@ -63,9 +70,12 @@ const AdminDashboard = () => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-5 bg-[#F5FAF8] ml-72">
-        <Outlet />
-      </main>
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-72' : 'ml-0'}`}>
+        <DashboardNavbar />
+        <main className="p-5 mt-16">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

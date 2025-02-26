@@ -1,13 +1,20 @@
-import { useGetOrdersQuery, useUpdateOrderStatusMutation } from "@/redux/features/order/orderApi";
+import {
+  useGetOrdersQuery,
+  useUpdateOrderStatusMutation,
+} from "@/redux/features/order/orderApi";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-// Inside the AdminOverviews component, add this after your existing code:
 const RecentOrdersTable = () => {
-  // Fetch only the most recent orders, limiting to 5
-  const { data: ordersData, isLoading: ordersLoading } = useGetOrdersQuery({
-    limit: 5,
-  });
+  const { data: ordersData, isLoading: ordersLoading } = useGetOrdersQuery(
+    undefined,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  // Get last 5 orders
+  const recentOrders = ordersData?.data?.data?.slice(0, 5) || [];
 
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
@@ -76,7 +83,7 @@ const RecentOrdersTable = () => {
             </thead>
 
             <tbody className="bg-white divide-y divide-gray-200">
-              {ordersData?.data?.data?.map((order: any) => (
+              {recentOrders.map((order: any) => (
                 <tr key={order._id} className="hover:bg-gray-50">
                   <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                     <Link
@@ -87,7 +94,7 @@ const RecentOrdersTable = () => {
                     </Link>
                   </td>
                   <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
-                    {order?.user?.name || "Anonymous"}
+                    {order?.user?.name}
                   </td>
                   <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                     {formatCurrency(order?.totalPrice || 0)}
@@ -111,13 +118,17 @@ const RecentOrdersTable = () => {
                   </td>
                   <td className="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                     {new Date(
-                      order._id.getTimestamp?.() || order.createdAt || Date.now()
+                      order._id.getTimestamp?.() ||
+                        order.createdAt ||
+                        Date.now()
                     ).toLocaleDateString()}
                   </td>
                   <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                     <select
                       value={order.status}
-                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(order._id, e.target.value)
+                      }
                       className="block w-full sm:w-auto px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none cursor-pointer hover:border-gray-400 transition-colors duration-200"
                     >
                       <option value="Pending">Pending</option>
@@ -129,8 +140,7 @@ const RecentOrdersTable = () => {
                   </td>
                 </tr>
               ))}
-              {(!ordersData?.data?.data ||
-                ordersData?.data?.data.length === 0) && (
+              {(!recentOrders || recentOrders.length === 0) && (
                 <tr>
                   <td
                     colSpan={6}

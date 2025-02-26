@@ -3,6 +3,7 @@ import { baseApi } from "./api/baseApi";
 import authReducer from "./features/auth/authSlice";
 import productsReducer from "./features/products/productsSlice";
 import cartReducer from "./features/cart/cartSlice";
+import layoutReducer from "./features/layout/layoutSlice";
 
 import {
   persistReducer,
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
   auth: authReducer,
   products: productsReducer,
   cart: cartReducer,
+  layout: layoutReducer,
 });
 
 const persistConfig = {
