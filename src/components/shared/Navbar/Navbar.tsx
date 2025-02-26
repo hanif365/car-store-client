@@ -65,7 +65,7 @@ const Navbar = () => {
                 alt="CarStore Logo"
                 className="w-6 h-6"
               />
-              <span className="text-xl font-bold text-[#00095E] hidden md:block">
+              <span className="text-xl font-bold text-brand-secondary hidden md:block">
                 CarStore
               </span>
             </Link>
@@ -93,10 +93,10 @@ const Navbar = () => {
           >
             <ul className="h-screen md:h-auto items-center justify-center md:flex">
               <li
-                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-brand-primary transition duration-700 ease-in-out ${
                   location.pathname === "/"
-                    ? "text-[#7EA0FF]"
-                    : "text-[#00095E]"
+                    ? "text-brand-primary"
+                    : "text-brand-secondary"
                 }`}
               >
                 <Link
@@ -111,10 +111,10 @@ const Navbar = () => {
               </li>
 
               <li
-                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-brand-primary transition duration-700 ease-in-out ${
                   location.pathname === "/about"
-                    ? "text-[#7EA0FF]"
-                    : "text-[#00095E]"
+                    ? "text-brand-primary"
+                    : "text-brand-secondary"
                 }`}
               >
                 <Link
@@ -130,10 +130,10 @@ const Navbar = () => {
 
               {token && (
                 <li
-                  className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out ${
+                  className={`text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-brand-primary transition duration-700 ease-in-out ${
                     location.pathname === "/dashboard"
-                      ? "text-[#7EA0FF]"
-                      : "text-[#00095E]"
+                      ? "text-brand-primary"
+                      : "text-brand-secondary"
                   }`}
                 >
                   <Link
@@ -150,9 +150,9 @@ const Navbar = () => {
                 </li>
               )}
 
-              <li className="text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-[#7EA0FF] transition duration-700 ease-in-out">
-                <CartSheet />
-              </li>
+              <li className="text-lg font-bold py-2 md:px-4 text-center border-b-2 md:border-b-0 hover:text-brand-primary transition duration-700 ease-in-out">
+                  <CartSheet />
+                </li>
 
               {token ? (
                 <li className="text-lg font-bold py-2 px-4 text-center border-b-2 md:border-b-0">
