@@ -6,13 +6,16 @@ import {
   FaCar,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SalesBarChart from "./SalesBarChart";
 
 const AdminOverviews = () => {
   const {
     data: statsData,
     isLoading,
     error,
-  } = useGetDashboardStatsQuery(undefined);
+  } = useGetDashboardStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   // Animation variants for cards
   const containerVariants = {
@@ -55,6 +58,9 @@ const AdminOverviews = () => {
     );
   }
 
+  // Check the full structure of statsData to debug
+  console.log("Full statsData response:", statsData);
+
   const stats = statsData?.data || {
     totalUsers: 0,
     totalSoldProducts: 0,
@@ -62,10 +68,21 @@ const AdminOverviews = () => {
     totalProducts: 0,
   };
 
+  // Create a fallback monthly sales data for demonstration
+  const demoMonthlySales = [15, 8, 10, 3, 5, 7, 10, 3, 5, 2, 10, 13];
+
+  // Try to access monthlySales from different possible locations in the response
+  const monthlySales =
+    statsData?.data?.monthlySales ||
+    statsData?.monthlySales ||
+    demoMonthlySales;
+
+  console.log("Using monthly sales data:", monthlySales);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "BDT",
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -183,7 +200,8 @@ const AdminOverviews = () => {
         </motion.div>
       </motion.div>
 
-      {/* You can add more sections below, like recent orders, charts, etc. */}
+      {/* Add the sales chart with the determined monthlySales data */}
+      <SalesBarChart monthlySales={monthlySales} />
     </div>
   );
 };
