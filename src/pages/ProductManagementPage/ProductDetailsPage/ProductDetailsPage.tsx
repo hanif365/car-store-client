@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { selectAllProducts } from "@/redux/features/products/productsSlice";
 import { addToCart } from "@/redux/features/cart/cartSlice";
+import { toast } from "sonner";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -12,7 +13,9 @@ const ProductDetailsPage = () => {
   if (!products || products.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-center text-2xl font-bold">Loading products...</div>
+        <div className="text-center text-2xl font-bold">
+          Loading products...
+        </div>
       </div>
     );
   }
@@ -39,16 +42,19 @@ const ProductDetailsPage = () => {
       return;
     }
 
-    dispatch(
-      addToCart({
-        _id: product._id,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-        stock: product.stock,
-        image: product.image,
-      })
-    );
+    const productInfo = {
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      stock: product.stock,
+      image: product.image,
+    };
+
+    dispatch(addToCart(productInfo));
+    toast.success("Product added to cart successfully", {
+      duration: 1500,
+    });
   };
 
   return (

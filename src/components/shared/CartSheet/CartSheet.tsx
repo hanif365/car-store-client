@@ -72,7 +72,12 @@ const CartSheet = () => {
                             })
                           )
                         }
-                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
+                        disabled={item.quantity <= 1}
+                        className={`w-6 h-6 rounded ${
+                          item.quantity <= 1
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 text-black hover:bg-gray-300"
+                        }`}
                       >
                         -
                       </button>
@@ -88,7 +93,12 @@ const CartSheet = () => {
                             })
                           )
                         }
-                        className="w-6 h-6 bg-gray-200 text-black rounded hover:bg-gray-300"
+                        disabled={item.quantity >= item.stock}
+                        className={`w-6 h-6 rounded ${
+                          item.quantity >= item.stock
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 text-black hover:bg-gray-300"
+                        }`}
                       >
                         +
                       </button>
@@ -131,7 +141,7 @@ const CartSheet = () => {
         <SheetFooter className="border-t pt-4">
           <SheetClose asChild>
             <Button
-              className="w-full"
+              className="w-full bg-brand-primary text-white hover:bg-brand-secondary"
               onClick={() => navigate("/checkout")}
               disabled={cartData.items.length === 0}
             >

@@ -60,8 +60,15 @@ const OrderDetailsPage = () => {
           [
             `Status: ${orderData.bank_status}`,
             `Method: ${orderData.method}`,
-            `Transaction ID: ${orderData.bank_trx_id}`,
-            `Order ID: ${orderData.order_id}`,
+            `Currency: ${orderData.currency}`,
+            `Amount: ${new Intl.NumberFormat("en-BD", {
+              style: "currency",
+              currency: "BDT",
+            }).format(orderData.amount)}`,
+            `Payable Amount: ${new Intl.NumberFormat("en-BD", {
+              style: "currency",
+              currency: "BDT",
+            }).format(orderData.payable_amount)}`,
           ].join("\n"),
         ],
       ],
@@ -72,7 +79,7 @@ const OrderDetailsPage = () => {
       styles: { fontSize: 12, cellPadding: 2 },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 10; // Cast to any to avoid TypeScript error
+    yPos = (doc as any).lastAutoTable.finalY + 10;
 
     // Transaction Details
     autoTable(doc, {
@@ -88,6 +95,8 @@ const OrderDetailsPage = () => {
         ],
         ["SP Code:", orderData.sp_code],
         ["SP Message:", orderData.sp_message],
+        ["Transaction ID:", orderData.bank_trx_id],
+        ["Order ID:", orderData.order_id],
       ],
       columnStyles: {
         0: { cellWidth: 50, halign: "left" },
@@ -96,7 +105,7 @@ const OrderDetailsPage = () => {
       styles: { fontSize: 12, cellPadding: 2 },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 15; // Cast to any to avoid TypeScript error
+    yPos = (doc as any).lastAutoTable.finalY + 15;
 
     // Transaction Time
     doc.setFontSize(12);
@@ -117,27 +126,38 @@ const OrderDetailsPage = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (!orderData) {
-    return <div>No order found.</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        No order found.
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
+    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 bg-white shadow rounded-lg mt-16 sm:mt-20">
       <button
         onClick={downloadPDF}
-        className="mb-4 p-2 bg-blue-600 text-white rounded"
+        className="w-full sm:w-auto mb-4 p-2 bg-brand-primary text-white rounded hover:bg-opacity-90 transition-colors"
       >
         Download PDF
       </button>
-      <div className="flex justify-between items-start mb-8 border-b pb-6">
-        <div>
-          <h1 className="text-4xl font-bold text-gray-800">INVOICE</h1>
+
+      <div className="flex flex-col sm:flex-row justify-between items-start mb-6 border-b pb-6">
+        <div className="mb-4 sm:mb-0">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+            INVOICE
+          </h1>
           <p className="text-gray-600 mt-2">Car Store Inc.</p>
         </div>
-        <div className="text-right">
+        <div className="text-left sm:text-right">
           <p className="text-xl font-semibold text-gray-800">
             #{orderData.invoice_no}
           </p>
@@ -147,10 +167,10 @@ const OrderDetailsPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-12 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mb-8">
         <div>
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Bill To:</h2>
-          <div className="text-gray-600">
+          <div className="text-gray-600 space-y-1">
             <p className="font-medium text-gray-800">{orderData.name}</p>
             <p>{orderData.email}</p>
             <p>{orderData.phone_no}</p>
@@ -163,7 +183,7 @@ const OrderDetailsPage = () => {
             Payment Details:
           </h2>
           <div className="text-gray-600">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
               <p className="font-medium">Status:</p>
               <p
                 className={`${
@@ -178,41 +198,74 @@ const OrderDetailsPage = () => {
               <p className="font-medium">Method:</p>
               <p>{orderData.method}</p>
 
-              <p className="font-medium">Transaction ID:</p>
-              <p>{orderData.bank_trx_id}</p>
+              <p className="font-medium">Currency:</p>
+              <p>{orderData.currency}</p>
 
-              <p className="font-medium">Order ID:</p>
-              <p>{orderData.order_id}</p>
+              <p className="font-medium">Amount:</p>
+              <p className="break-words">
+                {new Intl.NumberFormat("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                }).format(orderData.amount)}
+              </p>
+
+              <p className="font-medium">Payable Amount:</p>
+              <p className="break-words">
+                {new Intl.NumberFormat("en-BD", {
+                  style: "currency",
+                  currency: "BDT",
+                }).format(orderData.payable_amount)}
+              </p>
+
+              {orderData.discsount_amount && (
+                <>
+                  <p className="font-medium">Discount Amount:</p>
+                  <p className="break-words">
+                    {new Intl.NumberFormat("en-BD", {
+                      style: "currency",
+                      currency: "BDT",
+                    }).format(orderData.discsount_amount)}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-lg p-6 mb-8">
+      <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-8">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Transaction Details
         </h2>
-        <div className="grid grid-cols-2 gap-4 text-gray-600">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+          <div className="space-y-1">
             <p className="font-medium">SP Code:</p>
-            <p>{orderData.sp_code}</p>
+            <p className="break-words">{orderData.sp_code}</p>
           </div>
-          <div>
+          <div className="space-y-1">
             <p className="font-medium">SP Message:</p>
-            <p>{orderData.sp_message}</p>
+            <p className="break-words">{orderData.sp_message}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="font-medium">Transaction ID:</p>
+            <p className="break-words">{orderData.bank_trx_id}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="font-medium">Order ID:</p>
+            <p className="break-words">{orderData.order_id}</p>
           </div>
         </div>
       </div>
 
       <div className="border-t pt-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
           <div className="text-gray-600">
             <p>Transaction Time:</p>
             <p className="font-medium">
               {new Date(orderData.date_time).toLocaleTimeString()}
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <p className="text-sm text-gray-600">Thank you for your business</p>
             <p className="text-sm text-gray-600">Car Store Inc.</p>
           </div>
