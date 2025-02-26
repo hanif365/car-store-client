@@ -35,7 +35,6 @@ const OrderManagement = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6">Manage Orders</h2>
       <table className="min-w-full bg-white border rounded-lg">
         <thead className="bg-gray-50">
           <tr>
