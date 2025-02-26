@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import SalesBarChart from "./SalesBarChart";
+import MonthlySalesDoughnut from "./MonthlySalesDoughnut";
+import RecentOrdersTable from "./RecentOrdersTable";
 
 const AdminOverviews = () => {
   const {
@@ -68,16 +70,16 @@ const AdminOverviews = () => {
     totalProducts: 0,
   };
 
-  // Create a fallback monthly sales data for demonstration
+  // Create fallback monthly data for demonstration
   const demoMonthlySales = [15, 8, 10, 3, 5, 7, 10, 3, 5, 2, 10, 13];
-
-  // Try to access monthlySales from different possible locations in the response
-  const monthlySales =
-    statsData?.data?.monthlySales ||
-    statsData?.monthlySales ||
-    demoMonthlySales;
-
+  const demoMonthlySoldProducts = [5, 3, 4, 1, 2, 3, 4, 1, 2, 1, 3, 5];
+  
+  // Try to access monthlySales and monthlySoldProducts from different possible locations in the response
+  const monthlySales = statsData?.data?.monthlySales || demoMonthlySales;
+  const monthlySoldProducts = statsData?.data?.monthlySoldProducts || demoMonthlySoldProducts;
+  
   console.log("Using monthly sales data:", monthlySales);
+  console.log("Using monthly sold products data:", monthlySoldProducts);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -200,8 +202,17 @@ const AdminOverviews = () => {
         </motion.div>
       </motion.div>
 
-      {/* Add the sales chart with the determined monthlySales data */}
-      <SalesBarChart monthlySales={monthlySales} />
+      {/* Charts section - side by side on larger screens */}
+      <div className="mt-6 flex flex-col lg:flex-row gap-6">
+        {/* Sales revenue chart */}
+        {/* <SalesBarChart monthlySales={monthlySales} /> */}
+        
+        {/* Monthly car sales doughnut chart */}
+        <MonthlySalesDoughnut monthlySoldProducts={monthlySoldProducts} />
+      </div>
+
+      {/* Recent Orders Table */}
+      <RecentOrdersTable />
     </div>
   );
 };
