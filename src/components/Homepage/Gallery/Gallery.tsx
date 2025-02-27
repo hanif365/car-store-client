@@ -1,10 +1,4 @@
 import { useState } from "react";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "react-beautiful-dnd";
 
 // Import gallery images from assets
 import gallery2 from "@/assets/gallery/car1.png";
@@ -33,19 +27,6 @@ const Gallery = () => {
   ];
 
   const [images] = useState<GalleryImage[]>(initialImages);
-  const [imageOrder, setImageOrder] = useState<string[]>(
-    initialImages.map((img) => img.id)
-  );
-
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const newOrder = Array.from(imageOrder);
-    const [removed] = newOrder.splice(result.source.index, 1);
-    newOrder.splice(result.destination.index, 0, removed);
-
-    setImageOrder(newOrder);
-  };
 
   return (
     <section className="container mx-auto px-4 pb-10">
@@ -58,45 +39,23 @@ const Gallery = () => {
         </h2>
       </div>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="image-grid" direction="horizontal">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8"
-            >
-              {imageOrder.map((id, index) => {
-                const image = images.find((img) => img.id === id);
-                if (!image) return null;
-
-                return (
-                  <Draggable key={id} draggableId={id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`${
-                          index === 0 ? "sm:col-span-2 sm:row-span-2" : ""
-                        } relative group aspect-square overflow-hidden rounded-xl shadow-lg cursor-move transform transition-transform duration-300 hover:-translate-y-2`}
-                      >
-                        <img
-                          src={image.src}
-                          alt={`gallery-${index + 1}`}
-                          className="w-full h-full object-cover transition-all duration-500 hover:scale-110"
-                        />
-                        <div className="bg-black rounded-xl absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
-                      </div>
-                    )}
-                  </Draggable>
-                );
-              })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
+        {images.map((image, index) => (
+          <div
+            key={image.id}
+            className={`${
+              index === 0 ? "sm:col-span-2 sm:row-span-2" : ""
+            } relative group aspect-square overflow-hidden rounded-xl shadow-lg transform transition-transform duration-300 hover:-translate-y-2`}
+          >
+            <img
+              src={image.src}
+              alt={`gallery-${index + 1}`}
+              className="w-full h-full object-cover transition-all duration-500 hover:scale-110"
+            />
+            <div className="bg-black rounded-xl absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity duration-300" />
+          </div>
+        ))}
+      </div>
     </section>
   );
 };
