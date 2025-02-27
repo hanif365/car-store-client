@@ -48,7 +48,7 @@ const Gallery = () => {
   };
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 container mx-auto px-4">
+    <section className="container mx-auto px-4 pb-10">
       <div className="text-center mb-16">
         <h2 className="text-2xl md:text-4xl font-bold relative inline-block">
           <span className="text-brand-secondary">Our</span>
