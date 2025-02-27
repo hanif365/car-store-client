@@ -15,7 +15,7 @@ const RecentOrdersTable = () => {
   );
 
   // Get last 5 orders
-  const recentOrders = ordersData?.data?.data?.slice(0, 5) || [];
+  const recentOrders = ordersData?.data?.data?.slice(-5) || [];
 
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
