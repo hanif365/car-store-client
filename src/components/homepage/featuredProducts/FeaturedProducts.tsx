@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/features/products/productsApi";
 import { useAppDispatch } from "@/redux/hooks";
@@ -5,7 +6,7 @@ import { setAllProducts } from "@/redux/features/products/productsSlice";
 
 const FeaturedProducts = () => {
   const dispatch = useAppDispatch();
-  const { data: productsData, error, isLoading } = useGetProductsQuery({});
+  const { data: productsData } = useGetProductsQuery({});
 
   console.log("products", productsData);
 
@@ -18,7 +19,6 @@ const FeaturedProducts = () => {
     );
   }
 
-
   return (
     <div id="featured-cars" className="container mx-auto px-4 py-20">
       <div className="text-center mb-16">
@@ -30,7 +30,7 @@ const FeaturedProducts = () => {
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {productsData?.data?.data?.map((product) => (
+        {productsData?.data?.data?.map((product: any) => (
           <div
             key={product._id}
             className="group border rounded-lg overflow-hidden shadow-lg h-full flex flex-col"
@@ -45,19 +45,20 @@ const FeaturedProducts = () => {
             <div className="px-5 py-4 flex-1 flex flex-col">
               <div className="flex justify-between flex-1">
                 <div>
-                <h3 className="text-lg font-bold mb-1 line-clamp-2">{product.name}</h3>
-                <p className="text-sm text-gray-600">{product.brand}</p>
-                <p className="text-sm text-gray-600">{product.category}</p>
-                <p className="text-sm text-gray-600">{product.model}</p>
+                  <h3 className="text-lg font-bold mb-1 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">{product.brand}</p>
+                  <p className="text-sm text-gray-600">{product.category}</p>
+                  <p className="text-sm text-gray-600">{product.model}</p>
                 </div>
-                
+
                 <div>
-                <p className="text-base font-bold text-primary">
-                  ৳ {product.price}
-                </p>
-                {/* <p className="text-xs text-gray-500">Stock: {product.stock}</p> */}
+                  <p className="text-base font-bold text-primary">
+                    ৳ {product.price}
+                  </p>
+                  {/* <p className="text-xs text-gray-500">Stock: {product.stock}</p> */}
                 </div>
-               
               </div>
 
               <Link

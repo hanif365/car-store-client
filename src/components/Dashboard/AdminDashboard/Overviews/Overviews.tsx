@@ -6,7 +6,6 @@ import {
   FaCar,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import SalesBarChart from "./SalesBarChart";
 import MonthlySalesDoughnut from "./MonthlySalesDoughnut";
 import RecentOrdersTable from "./RecentOrdersTable";
 import Loader from "@/components/Shared/Loader/Loader";
@@ -70,11 +69,12 @@ const AdminOverviews = () => {
   // Create fallback monthly data for demonstration
   const demoMonthlySales = [15, 8, 10, 3, 5, 7, 10, 3, 5, 2, 10, 13];
   const demoMonthlySoldProducts = [5, 3, 4, 1, 2, 3, 4, 1, 2, 1, 3, 5];
-  
+
   // Try to access monthlySales and monthlySoldProducts from different possible locations in the response
   const monthlySales = statsData?.data?.monthlySales || demoMonthlySales;
-  const monthlySoldProducts = statsData?.data?.monthlySoldProducts || demoMonthlySoldProducts;
-  
+  const monthlySoldProducts =
+    statsData?.data?.monthlySoldProducts || demoMonthlySoldProducts;
+
   console.log("Using monthly sales data:", monthlySales);
   console.log("Using monthly sold products data:", monthlySoldProducts);
 
@@ -203,7 +203,7 @@ const AdminOverviews = () => {
       <div className="mt-6 flex flex-col lg:flex-row gap-6">
         {/* Sales revenue chart */}
         {/* <SalesBarChart monthlySales={monthlySales} /> */}
-        
+
         {/* Monthly car sales doughnut chart */}
         <MonthlySalesDoughnut monthlySoldProducts={monthlySoldProducts} />
       </div>
