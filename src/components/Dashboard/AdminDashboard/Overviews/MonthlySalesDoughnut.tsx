@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -17,7 +18,7 @@ const options = {
     },
     tooltip: {
       callbacks: {
-        label: function (context) {
+        label: function (context: any) {
           return `${context.formattedValue} cars`;
         },
       },

@@ -1,6 +1,5 @@
 import {
   createContext,
-  useContext,
   useState,
   ReactNode,
   useEffect,
@@ -29,18 +28,10 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
     <LoadingContext.Provider value={{ setIsLoading }}>
       {isLoading && (
         <div className="fixed inset-0 bg-white z-50">
-          <Loader height="100vh" />
+          <Loader />
         </div>
       )}
       <div className={isLoading ? "hidden" : "block"}>{children}</div>
     </LoadingContext.Provider>
   );
-};
-
-export const useLoading = () => {
-  const context = useContext(LoadingContext);
-  if (!context) {
-    throw new Error("useLoading must be used within a LoadingProvider");
-  }
-  return context;
 };

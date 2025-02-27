@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
@@ -41,7 +42,7 @@ const CheckoutPage = () => {
 
       await createOrder(orderData).unwrap();
     } catch (error) {
-      toast.error("Failed to place order: " + error?.message);
+      toast.error("Failed to place order: " + (error as any)?.message);
     }
   };
 
