@@ -6,14 +6,21 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Loader from "@/components/Shared/Loader/Loader";
+import { useState } from "react";
+import Pagination from "@/components/Shared/Pagination/Pagination";
 
 
 const OrderManagement = () => {
-  const { data: ordersData, isLoading } = useGetOrdersQuery(undefined, {
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+  });
+
+  const { data: ordersData, isLoading } = useGetOrdersQuery(filters, {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("ordersData", ordersData);
+  console.log("ordersData: ", ordersData)
 
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
@@ -35,6 +42,15 @@ const OrderManagement = () => {
   if (isLoading) {
     return <Loader />;
   }
+
+  const totalPages = Math.ceil((ordersData?.data?.meta?.total || 0) / (ordersData?.data?.meta?.limit || 10));
+
+  const handlePageChange = (page: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
 
   return (
     <div className="container mx-auto px-1 py-6 max-w-full">
@@ -92,39 +108,33 @@ const OrderManagement = () => {
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(
-                  order._id.getTimestamp?.() || order.createdAt || Date.now()
-                ).toLocaleDateString()}
+                {new Date(order.createdAt).toLocaleDateString()}
               </td>
               <td className="px-6 py-4 space-x-2 whitespace-nowrap text-sm text-gray-500">
                 <select
                   value={order.status}
-                  onChange={(e) =>
-                    handleStatusChange(order._id, e.target.value)
-                  }
+                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
                   className="block px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none cursor-pointer hover:border-gray-400 transition-colors duration-200"
                 >
-                  <option value="Pending" className="py-1">
-                    Pending
-                  </option>
-                  <option value="Processing" className="py-1">
-                    Processing
-                  </option>
-                  <option value="Shipped" className="py-1">
-                    Shipped
-                  </option>
-                  <option value="Delivered" className="py-1">
-                    Delivered
-                  </option>
-                  <option value="Cancelled" className="py-1">
-                    Cancelled
-                  </option>
+                  <option value="Pending">Pending</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
                 </select>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div className="mt-6">
+        <Pagination
+          currentPage={filters.page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
