@@ -7,13 +7,13 @@ import {
 } from "react-beautiful-dnd";
 
 // Import gallery images from assets
-import gallery1 from "@/assets/gallery/gallery1.jpg";
-import gallery2 from "@/assets/gallery/gallery2.jpg";
-import gallery3 from "@/assets/gallery/gallery3.jpg";
-import gallery4 from "@/assets/gallery/gallery4.jpg";
-import gallery5 from "@/assets/gallery/gallery5.jpg";
-import gallery6 from "@/assets/gallery/gallery6.jpg";
-import gallery7 from "@/assets/gallery/gallery7.jpg";
+import gallery2 from "@/assets/gallery/car1.png";
+import gallery1 from "@/assets/gallery/car5.png";
+import gallery3 from "@/assets/gallery/car2.png";
+import gallery4 from "@/assets/gallery/car7.png";
+import gallery5 from "@/assets/gallery/car10.png";
+import gallery6 from "@/assets/gallery/car13.png";
+import gallery7 from "@/assets/gallery/car14.png";
 
 interface GalleryImage {
   id: string;
