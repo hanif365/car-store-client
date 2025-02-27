@@ -13,8 +13,15 @@ const AllProductPage = () => {
   console.log("pagination meta", meta);
 
   return (
-    <div className="container mx-auto px-4 py-20">
-      <h2 className="text-3xl font-bold text-center mb-10">All Products</h2>
+    <div className="container mx-auto px-4 pt-32 pb-16">
+      <div className="text-center mb-16">
+        <h2 className="text-2xl md:text-4xl font-bold relative inline-block">
+          <span className="text-brand-secondary">All</span>
+          <span className="text-brand-primary"> Products</span>
+          <div className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-brand-primary to-brand-secondary"></div>
+          <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-brand-primary rotate-45"></div>
+        </h2>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {products?.map((product) => (
           <div
