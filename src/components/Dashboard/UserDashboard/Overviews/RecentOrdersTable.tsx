@@ -4,6 +4,7 @@ interface Order {
   _id: string;
   totalPrice: number;
   status: string;
+  paymentStatus: string;
   transaction?: {
     id: string;
   };
@@ -51,6 +52,9 @@ const RecentOrdersTable = ({ orders }: RecentOrdersTableProps) => {
                 Status
               </th>
               <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Payment Status
+              </th>
+              <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
             </tr>
@@ -86,6 +90,19 @@ const RecentOrdersTable = ({ orders }: RecentOrdersTableProps) => {
                     {order.status}
                   </span>
                 </td>
+                <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      order.paymentStatus === "Paid"
+                        ? "bg-green-100 text-green-800"
+                        : order.paymentStatus === "Pending"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
+                  >
+                    {order.paymentStatus}
+                  </span>
+                </td>
                 <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                   {new Date(order.createdAt).toLocaleDateString()}
                 </td>
@@ -94,7 +111,7 @@ const RecentOrdersTable = ({ orders }: RecentOrdersTableProps) => {
             {recentOrders.length === 0 && (
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="px-3 sm:px-6 py-4 text-center text-sm text-gray-500"
                 >
                   No orders found
