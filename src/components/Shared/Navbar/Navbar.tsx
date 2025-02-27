@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   selectCurrentToken,
-  logout,
   selectCurrentUser,
 } from "@/redux/features/auth/authSlice";
 import "./Navbar.css";
 import { FaEquals, FaXmark } from "react-icons/fa6";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import CartSheet from "@/components/Shared/CartSheet/CartSheet";
-import { clearCart } from "@/redux/features/cart/cartSlice";
+import { handleLogoutUtilFunction } from "@/utils/auth";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
@@ -18,12 +17,11 @@ const Navbar = () => {
   const token = useAppSelector(selectCurrentToken);
   const user = useAppSelector(selectCurrentUser);
   console.log("user", user);
-  const dispatch = useAppDispatch();
+
   const location = useLocation();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    dispatch(clearCart());
+    const handleLogout = () => {
+    handleLogoutUtilFunction();
     setNavbar(false);
   };
 

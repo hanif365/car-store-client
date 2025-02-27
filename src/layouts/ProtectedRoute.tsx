@@ -1,10 +1,11 @@
 import { ReactNode } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { logout, selectCurrentToken } from "../redux/features/auth/authSlice";
+import { useAppSelector } from "../redux/hooks";
+import { selectCurrentToken } from "../redux/features/auth/authSlice";
 
 import { Navigate } from "react-router-dom";
 import { verifyToken } from "../utils/verifyToken";
 import { JwtPayload } from "jwt-decode";
+import { handleLogoutUtilFunction } from "@/utils/auth";
 
 type TProtectedRoute = {
   children: ReactNode;
@@ -27,11 +28,9 @@ const ProtectedRoute = ({ children, roles }: TProtectedRoute) => {
   console.log("loginUser from ProtectedRoute", loginUser);
   console.log("token from ProtectedRoute", token);
 
-  const dispatch = useAppDispatch();
-
   // check user role is in the allowed roles
   if (roles !== undefined && !roles.includes(loginUser?.role as string)) {
-    dispatch(logout());
+    handleLogoutUtilFunction();
     return <Navigate to="/login" replace={true} />;
   }
 

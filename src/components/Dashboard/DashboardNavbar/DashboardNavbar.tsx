@@ -10,6 +10,7 @@ const DashboardNavbar = () => {
   const isSidebarOpen = useAppSelector(selectIsSidebarOpen);
   const { data: profileData } = useGetMyProfileQuery({});
   const { name, profileImage, role } = profileData?.data || {};
+  console.log("profileData", profileData);
 
   return (
     <nav className={`bg-white shadow-md fixed top-0 ${isSidebarOpen ? 'left-72' : 'left-0'} right-0 h-20 z-20 rounded-bl-sm transition-all duration-300`}>

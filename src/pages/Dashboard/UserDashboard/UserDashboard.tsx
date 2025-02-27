@@ -1,13 +1,14 @@
-import { logout } from "@/redux/features/auth/authSlice";
-import { clearCart } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import DashboardNavbar from "@/components/Dashboard/DashboardNavbar/DashboardNavbar";
+import { selectIsSidebarOpen } from "@/redux/features/layout/layoutSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { handleLogoutUtilFunction } from "@/utils/auth";
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const UserDashboard = () => {
   const location = useLocation();
+  const isSidebarOpen = useAppSelector(selectIsSidebarOpen);
   const [activeTab, setActiveTab] = useState("");
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const path = location.pathname.split('/').pop();
@@ -15,14 +16,17 @@ const UserDashboard = () => {
   }, [location.pathname]);
 
   const handleLogout = () => {
-    dispatch(logout());
-    dispatch(clearCart());
+    handleLogoutUtilFunction();
   };
 
   return (
-    <div className="flex">
-      <aside className="w-72 bg-white text-black p-5 overflow-y-auto h-screen">
-        <h1 className="text-2xl font-bold mb-5">User Dashboard</h1>
+    <div className="flex min-h-screen bg-[#F5FAF8]">
+      <aside 
+        className={`fixed top-0 left-0 h-full bg-white text-black p-5 overflow-y-auto border-r border-gray-200 shadow-lg transition-all duration-300 ${
+          isSidebarOpen ? 'w-72' : 'w-0 -translate-x-full'
+        }`}
+      >
+        <h1 className="text-2xl font-bold mb-5 text-center">User Dashboard</h1>
         <nav>
           <ul className="space-y-2">
             <li>
@@ -62,9 +66,12 @@ const UserDashboard = () => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-5 ml-72">
-        <Outlet />
-      </main>
+      <div className={`flex-1 ${isSidebarOpen ? 'ml-72' : 'ml-0'} transition-all duration-300`}>
+        <DashboardNavbar />
+        <main className="p-5 mt-16">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

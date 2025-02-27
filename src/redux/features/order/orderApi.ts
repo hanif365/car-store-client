@@ -30,6 +30,13 @@ const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['orders'],
     }),
+    getMyOrders: builder.query({
+      query: () => ({
+        url: "/orders/my-orders",
+        method: "GET",
+      }),
+      providesTags: ['orders'],
+    }),
   }),
 });
 
@@ -38,4 +45,5 @@ export const {
   useGetOrdersQuery,
   useVerifyOrderQuery,
   useUpdateOrderStatusMutation,
+  useGetMyOrdersQuery,
 } = orderApi;
