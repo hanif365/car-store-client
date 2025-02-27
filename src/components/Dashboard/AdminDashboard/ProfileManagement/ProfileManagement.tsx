@@ -45,7 +45,9 @@ const ProfileManagement = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const currentUser = useAppSelector(selectCurrentUser);
 
-  const { data: profileData, isLoading } = useGetMyProfileQuery({});
+  const { data: profileData, isLoading } = useGetMyProfileQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [updateProfile] = useUpdateProfileMutation();
   const [changePassword] = useChangePasswordMutation();
 
@@ -428,7 +430,9 @@ const ProfileManagement = () => {
               <div className="flex items-start">
                 <FaInfoCircle className="text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
                 <p className="text-xs text-blue-700">
-                  After changing your password, you'll be automatically logged out and redirected to the login page. Please sign in with your new password.
+                  After changing your password, you'll be automatically logged
+                  out and redirected to the login page. Please sign in with your
+                  new password.
                 </p>
               </div>
             </div>
