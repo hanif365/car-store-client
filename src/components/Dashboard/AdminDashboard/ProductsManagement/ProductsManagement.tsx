@@ -9,6 +9,7 @@ import {
 import { toast } from "sonner";
 import { uploadImageToImgBB } from "@/utils/imageUpload";
 import Loader from "@/components/Shared/Loader/Loader";
+import Pagination from "@/components/Shared/Pagination/Pagination";
 
 interface IProductForm {
   name: string;
@@ -31,6 +32,10 @@ const ProductsManagement = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+  });
 
   const {
     register,
@@ -40,7 +45,9 @@ const ProductsManagement = () => {
     formState: { errors },
   } = useForm<IProductForm>();
 
-  const { data: productsData, isLoading } = useGetProductsQuery({});
+  const { data: productsData, isLoading } = useGetProductsQuery(filters, {
+    refetchOnMountOrArgChange: true,
+  });
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
@@ -135,6 +142,17 @@ const ProductsManagement = () => {
       );
     }
   };
+
+  const handlePageChange = (page: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
+
+  const totalPages = Math.ceil(
+    (productsData?.data?.meta?.total || 0) / (productsData?.data?.meta?.limit || 10)
+  );
 
   if (isLoading) {
     return <Loader />;
@@ -348,85 +366,96 @@ const ProductsManagement = () => {
           </div>
 
           {/* Desktop View */}
-          <table className="hidden sm:table min-w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Image
-                </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Brand
-                </th>
-                <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Model
-                </th>
-                <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Year
-                </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Stock
-                </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {productsData?.data?.data?.map((product: IProduct) => (
-                <tr key={product._id} className="hover:bg-gray-50">
-                  <td className="px-4 sm:px-6 py-4">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-10 w-10 sm:h-12 sm:w-12 object-cover rounded"
-                    />
-                  </td>
-                  <td className="px-4 sm:px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
-                      {product.name}
-                    </div>
-                  </td>
-                  <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-500">
-                    {product.brand}
-                  </td>
-                  <td className="hidden md:table-cell px-6 py-4 text-sm text-gray-500">
-                    {product.model}
-                  </td>
-                  <td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-500">
-                    {product.yearOfManufacture}
-                  </td>
-                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-900">
-                    ${product.price}
-                  </td>
-                  <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-500">
-                    {product.stock}
-                  </td>
-                  <td className="px-4 sm:px-6 py-4">
-                    <div className="flex space-x-2 text-sm">
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(product._id)}
-                        className="text-red-600 hover:text-red-800 font-medium"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+          <div className="hidden sm:block">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Image
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Brand
+                  </th>
+                  <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Model
+                  </th>
+                  <th className="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Year
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Price
+                  </th>
+                  <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Stock
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {productsData?.data?.data?.map((product: IProduct) => (
+                  <tr key={product._id} className="hover:bg-gray-50">
+                    <td className="px-4 sm:px-6 py-4">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-10 w-10 sm:h-12 sm:w-12 object-cover rounded"
+                      />
+                    </td>
+                    <td className="px-4 sm:px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                        {product.name}
+                      </div>
+                    </td>
+                    <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-500">
+                      {product.brand}
+                    </td>
+                    <td className="hidden md:table-cell px-6 py-4 text-sm text-gray-500">
+                      {product.model}
+                    </td>
+                    <td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-500">
+                      {product.yearOfManufacture}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-900">
+                      ${product.price}
+                    </td>
+                    <td className="hidden sm:table-cell px-6 py-4 text-sm text-gray-500">
+                      {product.stock}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4">
+                      <div className="flex space-x-2 text-sm">
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product._id)}
+                          className="text-red-600 hover:text-red-800 font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Add Pagination */}
+        <div className="mt-6 sm:mt-8 pb-4">
+          <Pagination
+            currentPage={filters.page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>
