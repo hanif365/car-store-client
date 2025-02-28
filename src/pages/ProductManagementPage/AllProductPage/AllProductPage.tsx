@@ -4,6 +4,7 @@ import ProductFilters from "./ProductFilters";
 import { Link } from "react-router-dom";
 import Loader from "@/components/Shared/Loader/Loader";
 import Pagination from "@/components/Shared/Pagination/Pagination";
+import { motion } from "framer-motion";
 
 interface Product {
   _id: string;
@@ -78,29 +79,67 @@ const AllProductPage = () => {
         <div className="w-full lg:col-span-3">
           <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
             {productsData?.data?.data?.map((product: Product) => (
-              <div
+              <motion.div
                 key={product._id}
-                className="group border rounded-lg overflow-hidden shadow-lg flex flex-col"
+                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-[300px] relative"
+                whileHover="hover"
+                initial="rest"
               >
-                <div className="relative h-40 sm:h-48 overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-125"
-                  />
-                </div>
-                <div className="p-3 sm:p-4 flex flex-col flex-grow">
-                  <h3 className="text-lg sm:text-xl font-semibold line-clamp-2">{product.name}</h3>
-                  <p className="text-gray-600 text-sm sm:text-base">{product.brand}</p>
-                  <p className="text-base sm:text-lg font-bold text-primary mt-1">${product.price}</p>
-                  <Link
-                    to={`/products/${product._id}`}
-                    className="mt-auto inline-block px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white text-sm sm:text-base rounded hover:bg-blue-700 transition duration-300 text-center"
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+                
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/90 to-black/100 flex flex-col justify-end p-6"
+                  initial={{ opacity: 0 }}
+                  variants={{
+                    hover: { opacity: 1 },
+                    rest: { opacity: 0 }
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    variants={{
+                      hover: { y: 0, opacity: 1 },
+                      rest: { y: 20, opacity: 0 }
+                    }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
                   >
-                    View Details
-                  </Link>
-                </div>
-              </div>
+                    <h3 className="text-xl font-semibold text-white mb-2 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    
+                    <div className="space-y-1.5 mb-3 text-white">
+                      <div className="flex items-center">
+                        <span className="font-medium mr-2">Brand:</span>
+                        <span>{product.brand}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="font-medium mr-2">Category:</span>
+                        <span>{product.category}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="font-medium mr-2">Model:</span>
+                        <span>{product.model}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-xl font-bold text-white mb-4">
+                      ৳ {product.price.toLocaleString()}
+                    </div>
+
+                    <Link
+                      to={`/products/${product._id}`}
+                      className="block w-full px-4 py-2.5 bg-brand-primary text-white text-center rounded-lg hover:bg-white hover:text-brand-primary transition-colors duration-300 font-medium"
+                    >
+                      View Details
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             ))}
           </div>
           

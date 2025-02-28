@@ -11,7 +11,11 @@ import Loader from "@/components/Shared/Loader/Loader";
 import RecentOrdersTable from "./RecentOrdersTable";
 
 const UserOverviews = () => {
-  const { data: ordersData, isLoading, error } = useGetMyOrdersQuery(undefined, {
+  const {
+    data: ordersData,
+    isLoading,
+    error,
+  } = useGetMyOrdersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -52,15 +56,23 @@ const UserOverviews = () => {
     );
   }
 
+  // Check the full structure of statsData to debug
+  console.log("Full ordersData response:", ordersData);
+
   const orders = ordersData?.data?.data || [];
 
   // Calculate statistics
   const totalOrders = orders.length;
-  const totalSpent = orders.reduce((acc: number, order: any) => acc + (order.totalPrice || 0), 0);
-  const activeOrders = orders.filter((order: any) => 
+  const totalSpent = orders.reduce(
+    (acc: number, order: any) => acc + (order.totalPrice || 0),
+    0
+  );
+  const activeOrders = orders.filter((order: any) =>
     ["Pending", "Processing", "Shipped"].includes(order.status)
   ).length;
-  const deliveredOrders = orders.filter((order: any) => order.status === "Delivered").length;
+  const deliveredOrders = orders.filter(
+    (order: any) => order.status === "Delivered"
+  ).length;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -86,7 +98,9 @@ const UserOverviews = () => {
           <div className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Orders</p>
+                <p className="text-sm font-medium text-gray-500">
+                  Total Orders
+                </p>
                 <p className="text-2xl font-bold text-gray-800 mt-1">
                   {totalOrders}
                 </p>
@@ -136,7 +150,9 @@ const UserOverviews = () => {
           <div className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Active Orders</p>
+                <p className="text-sm font-medium text-gray-500">
+                  Active Orders
+                </p>
                 <p className="text-2xl font-bold text-gray-800 mt-1">
                   {activeOrders}
                 </p>

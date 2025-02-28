@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/features/products/productsApi";
 import { useAppDispatch } from "@/redux/hooks";
 import { setAllProducts } from "@/redux/features/products/productsSlice";
+import { motion } from "framer-motion";
 
 const FeaturedProducts = () => {
   const dispatch = useAppDispatch();
   const { data: productsData } = useGetProductsQuery({});
-
-  console.log("products", productsData);
 
   if (productsData?.data) {
     dispatch(
@@ -29,52 +28,77 @@ const FeaturedProducts = () => {
           <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-brand-primary rotate-45"></div>
         </h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {productsData?.data?.data?.slice(0, 8).map((product: any) => (
-          <div
+          <motion.div
             key={product._id}
-            className="group border rounded-lg overflow-hidden shadow-lg h-full flex flex-col"
+            className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-[300px] relative"
+            whileHover="hover"
+            initial="rest"
           >
-            <div className="relative h-48 overflow-hidden">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-125 group-hover:grayscale absolute top-0 left-0"
-              />
-            </div>
-            <div className="px-5 py-4 flex-1 flex flex-col">
-              <div className="flex justify-between flex-1">
-                <div>
-                  <h3 className="text-lg font-bold mb-1 line-clamp-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">{product.brand}</p>
-                  <p className="text-sm text-gray-600">{product.category}</p>
-                  <p className="text-sm text-gray-600">{product.model}</p>
-                </div>
-
-                <div>
-                  <p className="text-base font-bold text-primary">
-                    ৳ {product.price}
-                  </p>
-                  {/* <p className="text-xs text-gray-500">Stock: {product.stock}</p> */}
-                </div>
-              </div>
-
-              <Link
-                to={`/products/${product._id}`}
-                className="mt-4 block w-full px-4 py-2 bg-brand-primary text-white rounded hover:bg-brand-secondary transition duration-300 text-center"
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+            
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/90 to-black/100 flex flex-col justify-end p-6"
+              initial={{ opacity: 0 }}
+              variants={{
+                hover: { opacity: 1 },
+                rest: { opacity: 0 }
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                variants={{
+                  hover: { y: 0, opacity: 1 },
+                  rest: { y: 20, opacity: 0 }
+                }}
+                transition={{ duration: 0.3, delay: 0.1 }}
               >
-                View Details
-              </Link>
-            </div>
-          </div>
+                <h3 className="text-xl font-semibold text-white mb-2 line-clamp-2">
+                  {product.name}
+                </h3>
+                
+                <div className="space-y-1.5 mb-3 text-white">
+                  <div className="flex items-center">
+                    <span className="font-medium mr-2">Brand:</span>
+                    <span>{product.brand}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-medium mr-2">Category:</span>
+                    <span>{product.category}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-medium mr-2">Model:</span>
+                    <span>{product.model}</span>
+                  </div>
+                </div>
+
+                <div className="text-xl font-bold text-white mb-4">
+                  ৳ {product.price.toLocaleString()}
+                </div>
+
+                <Link
+                  to={`/products/${product._id}`}
+                  className="block w-full px-4 py-2.5 bg-brand-primary text-white text-center rounded-lg hover:bg-white hover:text-brand-primary transition-colors duration-300 font-medium"
+                >
+                  View Details
+                </Link>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
-      <div className="text-center mt-6">
+
+      <div className="text-center mt-12">
         <Link
           to="/all-products"
-          className="inline-block px-6 py-3 bg-brand-secondary text-white rounded hover:bg-brand-primary transition duration-300"
+          className="inline-block px-8 py-3.5 bg-brand-secondary text-white rounded-lg hover:bg-brand-primary transition-colors duration-300 font-medium text-lg"
         >
           View All Products
         </Link>
