@@ -10,11 +10,13 @@ const orderApi = baseApi.injectEndpoints({
       }),
     }),
     getOrders: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/orders",
         method: "GET",
+        params: params,
       }),
-      providesTags: ['orders'],
+
+      providesTags: ["orders"],
     }),
     verifyOrder: builder.query({
       query: (order_id) => ({
@@ -28,14 +30,15 @@ const orderApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ['orders'],
+      invalidatesTags: ["orders"],
     }),
     getMyOrders: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/orders/my-orders",
         method: "GET",
+        params: params,
       }),
-      providesTags: ['orders'],
+      providesTags: ["orders"],
     }),
   }),
 });

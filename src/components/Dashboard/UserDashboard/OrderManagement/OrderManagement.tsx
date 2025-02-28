@@ -2,15 +2,33 @@
 import { useGetMyOrdersQuery } from "@/redux/features/order/orderApi";
 import { Link } from "react-router-dom";
 import Loader from "@/components/Shared/Loader/Loader";
+import { useState } from "react";
+import Pagination from "@/components/Shared/Pagination/Pagination";
 
 const OrderManagement = () => {
-  const { data: ordersData, isLoading } = useGetMyOrdersQuery(undefined, {
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+  });
+
+  const { data: ordersData, isLoading } = useGetMyOrdersQuery(filters, {
     refetchOnMountOrArgChange: true,
   });
 
   if (isLoading) {
     return <Loader />;
   }
+
+  const totalPages = Math.ceil(
+    (ordersData?.data?.meta?.total || 0) / (ordersData?.data?.meta?.limit || 10)
+  );
+
+  const handlePageChange = (page: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
 
   return (
     <div className="container mx-auto px-1 py-6 max-w-full">
@@ -85,6 +103,14 @@ const OrderManagement = () => {
           ))}
         </tbody>
       </table>
+
+      <div className="mt-6">
+        <Pagination
+          currentPage={filters.page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
 };
