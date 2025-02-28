@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useGetProductsQuery } from "@/redux/features/products/productsApi";
 import ProductFilters from "./ProductFilters";
 import { Link } from "react-router-dom";
@@ -19,39 +19,71 @@ interface Product {
 const AllProductPage = () => {
   const [filters, setFilters] = useState({
     page: 1,
-    limit: 10
+    limit: 12,
   });
   const { data: productsData, isLoading } = useGetProductsQuery(filters, {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("productsData: ",productsData)
+  console.log("productsData: ", productsData);
 
   // Extract unique values for filter options from the nested data structure
-  const brands = [...new Set(productsData?.data?.data?.map((product: Product) => product.brand) || [])];
-  const categories = [...new Set(productsData?.data?.data?.map((product: Product) => product.category) || [])];
-  const models = [...new Set(productsData?.data?.data?.map((product: Product) => product.model) || [])];
+  const brands = [
+    ...new Set(
+      productsData?.data?.data?.map((product: Product) => product.brand) || []
+    ),
+  ];
+  const categories = [
+    ...new Set(
+      productsData?.data?.data?.map((product: Product) => product.category) ||
+        []
+    ),
+  ];
+  const models = [
+    ...new Set(
+      productsData?.data?.data?.map((product: Product) => product.model) || []
+    ),
+  ];
 
-  const handleFilterChange = (newFilters: Record<string, unknown>) => {
-    const cleanedFilters = Object.fromEntries(
-      Object.entries(newFilters).filter(([, value]) => value !== "" && value !== false)
-    );
-    setFilters(prev => ({
-      ...prev,
-      ...cleanedFilters,
-      page: 1 // Reset to first page when filters change
-    }));
-  };
+  const handleFilterChange = useCallback(
+    (newFilters: Record<string, unknown>) => {
+      // Start with basic pagination parameters
+      const baseFilters = {
+        page: 1,
+        limit: 12,
+      };
+
+      // Add new filters only if they have valid values
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (
+          value === "" ||
+          value === false ||
+          value === null ||
+          value === undefined
+        ) {
+          return;
+        }
+        (baseFilters as Record<string, unknown>)[key] = value;
+      });
+
+      // Update filters state
+      setFilters(baseFilters);
+    },
+    []
+  );
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      page
+      page,
     }));
   };
 
   // Add this before the return statement
-  const totalPages = Math.ceil((productsData?.data?.meta?.total || 0) / (productsData?.data?.meta?.limit || 10));
+  const totalPages = Math.ceil(
+    (productsData?.data?.meta?.total || 0) /
+      (productsData?.data?.meta?.limit || 12)
+  );
 
   if (isLoading) return <Loader />;
 
@@ -90,13 +122,13 @@ const AllProductPage = () => {
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
-                
-                <motion.div 
+
+                <motion.div
                   className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/90 to-black/100 flex flex-col justify-end p-6"
                   initial={{ opacity: 0 }}
                   variants={{
                     hover: { opacity: 1 },
-                    rest: { opacity: 0 }
+                    rest: { opacity: 0 },
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -104,14 +136,14 @@ const AllProductPage = () => {
                     initial={{ y: 20, opacity: 0 }}
                     variants={{
                       hover: { y: 0, opacity: 1 },
-                      rest: { y: 20, opacity: 0 }
+                      rest: { y: 20, opacity: 0 },
                     }}
                     transition={{ duration: 0.3, delay: 0.1 }}
                   >
                     <h3 className="text-xl font-semibold text-white mb-2 line-clamp-2">
                       {product.name}
                     </h3>
-                    
+
                     <div className="space-y-1.5 mb-3 text-white">
                       <div className="flex items-center">
                         <span className="font-medium mr-2">Brand:</span>
@@ -142,7 +174,7 @@ const AllProductPage = () => {
               </motion.div>
             ))}
           </div>
-          
+
           <div className="mt-6 sm:mt-8">
             <Pagination
               currentPage={filters.page}
