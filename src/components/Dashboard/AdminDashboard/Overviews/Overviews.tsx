@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import MonthlySalesDoughnut from "./MonthlySalesDoughnut";
 import RecentOrdersTable from "./RecentOrdersTable";
 import Loader from "@/components/Shared/Loader/Loader";
+import SalesBarChart from "./SalesBarChart";
 
 const AdminOverviews = () => {
   const {
@@ -18,6 +19,10 @@ const AdminOverviews = () => {
   } = useGetDashboardStatsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
+  // Add console logs to check the data
+  console.log("Stats Data:", statsData);
+  console.log("Monthly Revenue:", statsData?.data?.monthlyRevenue);
 
   // Animation variants for cards
   const containerVariants = {
@@ -67,6 +72,11 @@ const AdminOverviews = () => {
 
   const monthlySoldProducts =
     statsData?.data?.monthlySoldProducts || demoMonthlySoldProducts;
+
+  // Get monthly revenue data from the API response
+  const monthlyRevenue =
+    statsData?.data?.monthlySales?.map((revenue: number) => revenue / 1000) ||
+    Array(12).fill(0);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -195,8 +205,10 @@ const AdminOverviews = () => {
 
       {/* Charts and Tables Section */}
       <div className="mt-4 sm:mt-6 md:mt-8 space-y-4 sm:space-y-6 md:space-y-8">
-        {/* Charts section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="w-full h-[300px] sm:h-[400px] bg-white p-4 rounded-xl shadow-sm">
+            <SalesBarChart monthlyRevenue={monthlyRevenue} />
+          </div>
           <div className="w-full h-[300px] sm:h-[400px] bg-white p-4 rounded-xl shadow-sm">
             <MonthlySalesDoughnut monthlySoldProducts={monthlySoldProducts} />
           </div>

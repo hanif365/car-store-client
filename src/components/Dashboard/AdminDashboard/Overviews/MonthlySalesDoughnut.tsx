@@ -16,6 +16,21 @@ const options = {
     legend: {
       position: "bottom" as const,
       display: false,
+      labels: {
+        font: {
+          size: window.innerWidth < 768 ? 10 : 12
+        }
+      }
+    },
+    title: {
+      display: true,
+      text: "Car Sales Statistics",
+      color: "#374151",
+      font: {
+        size: window.innerWidth < 768 ? 14 : 16,
+        weight: "bold" as const
+      },
+      padding: window.innerWidth < 768 ? 10 : 20
     },
     tooltip: {
       callbacks: {
@@ -23,6 +38,12 @@ const options = {
           return `${context.formattedValue} cars`;
         },
       },
+      titleFont: {
+        size: window.innerWidth < 768 ? 12 : 14
+      },
+      bodyFont: {
+        size: window.innerWidth < 768 ? 11 : 13
+      }
     },
   },
 };
@@ -100,22 +121,19 @@ const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySold
             ? "rgb(56, 132, 255, 1)"
             : "rgba(255, 159, 64, 0.3)",
         ],
-        borderWidth: 1,
+        borderWidth: window.innerWidth < 768 ? 0.5 : 1,
       },
     ],
   };
 
   return (
-    <div className="mt-3 p-3 sm:p-4 md:p-5 bg-white rounded-lg shadow-sm w-full lg:w-1/2">
-      <h4 className="text-base sm:text-lg md:text-xl pb-3 sm:pb-4 md:pb-5 font-medium">Car Sales Statistics</h4>
-      <div className="relative w-full" style={{ height: "calc(100% - 2rem)" }}>
-        <div className="h-[200px] sm:h-[250px] md:h-[280px] lg:h-[300px]">
-          <Doughnut
-            options={options}
-            data={data}
-            className="w-full h-full"
-          />
-        </div>
+    <div className="relative w-full h-full">
+      <div className="h-[200px] sm:h-[220px] md:h-[250px] lg:h-[340px]">
+        <Doughnut
+          options={options}
+          data={data}
+          className="w-full h-full"
+        />
       </div>
     </div>
   );

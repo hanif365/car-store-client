@@ -1,125 +1,133 @@
- 
-// import React, { useEffect, useState, useRef } from "react";
-// import { Bar } from "react-chartjs-2";
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from "chart.js";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-// interface SalesBarChartProps {
-//   monthlySales: number[];
-// }
+interface SalesBarChartProps {
+  monthlyRevenue: number[];
+}
 
-// const options = {
-//   responsive: true,
-//   maintainAspectRatio: false,
-//   plugins: {
-//     legend: {
-//       position: "bottom" as const,
-//       display: false,
-//     },
-//     title: {
-//       display: false,
-//       text: "Chart.js Bar Chart",
-//     },
-//   },
-//   scales: {
-//     x: {
-//       grid: {
-//         display: false,
-//       },
-//     },
-//     y: {
-//       beginAtZero: true,
-//       title: {
-//         display: true,
-//         text: "Revenue (BDT)",
-//       },
-//     },
-//   },
-// };
+const SalesBarChart = ({ monthlyRevenue }: SalesBarChartProps) => {
+  console.log('Monthly Revenue in Chart:', monthlyRevenue);
 
-// const labels = [
-//   "Jan",
-//   "Feb",
-//   "Mar",
-//   "Apr",
-//   "May",
-//   "June",
-//   "July",
-//   "Aug",
-//   "Sep",
-//   "Oct",
-//   "Nov",
-//   "Dec",
-// ];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
-// // const currentMonthIndex = new Date().getMonth();
-// const highlightColor = "#A3CCFF";
-// const demoData = [15, 8, 10, 3, 5, 7, 10, 3, 5, 2, 10, 13];
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+        position: 'top' as const,
+        labels: {
+          font: {
+            size: window.innerWidth < 768 ? 12 : 14
+          }
+        }
+      },
+      title: {
+        display: true,
+        text: "Monthly Revenue",
+        color: "#374151",
+        font: {
+          size: window.innerWidth < 768 ? 14 : 16,
+          weight: "600",
+        },
+        padding: window.innerWidth < 768 ? 10 : 20,
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            return `Revenue: ৳ ${context.parsed.y}K`;
+          },
+        },
+        titleFont: {
+          size: window.innerWidth < 768 ? 12 : 14
+        },
+        bodyFont: {
+          size: window.innerWidth < 768 ? 11 : 13
+        }
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: "#E5E7EB",
+        },
+        ticks: {
+          color: "#6B7280",
+          callback: (value: number) => `৳ ${value}K`,
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          }
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: "#6B7280",
+          font: {
+            size: window.innerWidth < 768 ? 10 : 12
+          },
+          maxRotation: window.innerWidth < 768 ? 45 : 0
+        },
+      },
+    },
+  };
 
-// // This is a wrapper component that will re-mount the chart whenever data changes
-// // to avoid the cleanup issues with Chart.js
-// // const ChartWrapper = ({ data, options }) => {
-// //   const chartKey = useRef(`chart-${Date.now()}`).current;
-  
-// //   return (
-// //     <div style={{ height: "300px", position: "relative" }}>
-// //       <Bar 
-// //         data={data}
-// //         options={options}
-// //         key={chartKey}
-// //       />
-// //     </div>
-// //   );
-// // };
+  const data = {
+    labels: months,
+    datasets: [
+      {
+        label: "Revenue",
+        data: monthlyRevenue,
+        backgroundColor: "rgba(56, 132, 255, 0.5)",
+        borderColor: "rgb(56, 132, 255)",
+        borderWidth: window.innerWidth < 768 ? 0.5 : 1,
+        borderRadius: window.innerWidth < 768 ? 4 : 8,
+        hoverBackgroundColor: "rgba(56, 132, 255, 0.7)",
+        barThickness: window.innerWidth < 768 ? 15 : 25,
+      },
+    ],
+  };
 
-// const SalesBarChart = ({ monthlySales }: SalesBarChartProps) => {
-//   const [chartKey, setChartKey] = useState(Math.random());
+  return (
+    <div className="relative h-full w-full">
+      <Bar options={options as any} data={data} />
+    </div>
+  );
+};
 
-//   useEffect(() => {
-//     // Update the key to force re-render the chart when monthlySales changes
-//     setChartKey(Math.random());
-//   }, [monthlySales]);
-
-//   const displayData = Array.isArray(monthlySales) && monthlySales.length === 12 ? monthlySales : demoData;
-//   const data = {
-//     labels,
-//     datasets: [
-//       {
-//         data: displayData,
-//         backgroundColor: displayData.map((_, index) =>
-//           index === new Date().getMonth() ? highlightColor : "#E5E7EB"
-//         ),
-//         borderRadius: 4,
-//         borderSkipped: false,
-//         barThickness: 12,
-//       },
-//     ],
-//   };
-
-//   return (
-//     <div className="mt-3 p-3 bg-white rounded-lg shadow-sm w-full lg:w-1/2">
-//       <h4 className="text-lg font-medium pb-5">Monthly Sales Revenue</h4>
-//       <div style={{ height: "300px", position: "relative" }}>
-//         <Bar key={chartKey} data={data} options={options} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SalesBarChart;
+export default SalesBarChart;
