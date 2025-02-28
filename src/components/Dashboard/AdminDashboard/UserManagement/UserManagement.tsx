@@ -20,14 +20,11 @@ const UserManagement = () => {
     data: usersData,
     isLoading,
     isError,
-    error,
   } = useGetUsersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
   const [updateUser] = useUpdateUserMutation();
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
-
-  console.log("usersData", usersData);
 
   const handleToggleStatus = async (user: User) => {
     try {
@@ -52,8 +49,6 @@ const UserManagement = () => {
     }
   };
 
-  console.log("error", error);
-
   if (isLoading) {
     return <Loader />;
   }
@@ -67,46 +62,85 @@ const UserManagement = () => {
   }
 
   return (
-    <div className="container mx-auto px-1 py-6 max-w-full">
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
+    <div className="container mx-auto px-2 sm:px-1 py-3 sm:py-6 max-w-full">
+      {/* Mobile View */}
+      <div className="block sm:hidden space-y-4">
+        {usersData?.data?.map((user: User) => (
+          <div key={user._id} className="bg-white rounded-lg shadow p-4">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <h3 className="font-medium text-gray-900">{user.name}</h3>
+                <p className="text-sm text-gray-500 break-all">{user.email}</p>
+              </div>
+              <span
+                className={`px-2 py-1 rounded-full text-xs ${
+                  user.isActive
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                {user.isActive ? "Active" : "Inactive"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <div>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    user.role === "admin"
+                      ? "bg-purple-100 text-purple-800"
+                      : "bg-blue-100 text-blue-800"
+                  }`}
+                >
+                  {user.role}
+                </span>
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+              <button
+                onClick={() => handleToggleStatus(user)}
+                disabled={updatingUserId === user._id}
+                className={`px-3 py-1.5 rounded text-white text-xs ${
+                  updatingUserId === user._id
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : user.isActive
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
+              >
+                {updatingUserId === user._id
+                  ? "Updating..."
+                  : user.isActive
+                  ? "Deactivate"
+                  : "Activate"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop View */}
+      <div className="hidden sm:block overflow-x-auto bg-white rounded-lg shadow">
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Email
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Role
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                   Created At
                 </th>
-                <th
-                  scope="col"
-                  className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                <th className="px-4 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -114,13 +148,13 @@ const UserManagement = () => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {usersData?.data?.map((user: User) => (
                 <tr key={user._id} className="hover:bg-gray-50">
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm font-medium text-gray-900">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                     {user.name}
                   </td>
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-500 truncate max-w-[120px] md:max-w-none">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm text-gray-500 truncate max-w-[200px]">
                     {user.email}
                   </td>
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-500 hidden sm:table-cell">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${
                         user.role === "admin"
@@ -131,7 +165,7 @@ const UserManagement = () => {
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-500">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${
                         user.isActive
@@ -142,14 +176,14 @@ const UserManagement = () => {
                       {user.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm text-gray-500 hidden lg:table-cell">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-xs md:text-sm">
+                  <td className="px-4 lg:px-6 py-3 whitespace-nowrap text-sm">
                     <button
                       onClick={() => handleToggleStatus(user)}
                       disabled={updatingUserId === user._id}
-                      className={`px-2 py-1 md:px-4 md:py-2 rounded text-white text-xs md:text-sm ${
+                      className={`px-3 py-1.5 rounded text-white text-sm transition-colors ${
                         updatingUserId === user._id
                           ? "bg-gray-400 cursor-not-allowed"
                           : user.isActive

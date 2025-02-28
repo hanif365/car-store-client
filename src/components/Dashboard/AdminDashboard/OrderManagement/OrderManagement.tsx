@@ -19,8 +19,6 @@ const OrderManagement = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log("ordersData: ", ordersData);
-
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
@@ -54,53 +52,35 @@ const OrderManagement = () => {
   };
 
   return (
-    <div className="container mx-auto px-1 py-6 max-w-full">
-      <table className="min-w-full bg-white border rounded-lg">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Order ID
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              User
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Total Price
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Payment Status
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Date
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {ordersData?.data?.data?.map((order: any) => (
-            <tr key={order._id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <Link
-                  to={`/order/verification?order_id=${order?.transaction?.id}`}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  {order._id.substring(order._id.length - 8)}
-                </Link>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                {order?.user?.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                ${order?.totalPrice}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm">
+    <div className="container mx-auto px-2 sm:px-1 py-3 sm:py-6 max-w-full">
+      {/* Mobile view - Card layout */}
+      <div className="md:hidden space-y-4">
+        {ordersData?.data?.data?.map((order: any) => (
+          <div key={order._id} className="bg-gray-50 p-3 rounded-lg">
+            <div className="flex justify-between items-center mb-2">
+              <Link
+                to={`/order/verification?order_id=${order?.transaction?.id}`}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                #{order._id.substring(order._id.length - 8)}
+              </Link>
+              <span className="text-xs text-gray-500">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600">User:</span>
+                <span className="text-sm font-medium">{order?.user?.name}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600">Total:</span>
+                <span className="text-sm font-medium">${order?.totalPrice}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600">Payment:</span>
                 <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  className={`px-2 py-1 text-xs font-semibold rounded-full ${
                     order.paymentStatus === "Paid"
                       ? "bg-green-100 text-green-800"
                       : order.paymentStatus === "Pending"
@@ -110,10 +90,13 @@ const OrderManagement = () => {
                 >
                   {order.paymentStatus}
                 </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                <span
-                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-600">Status:</span>
+                <select
+                  value={order.status}
+                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                  className={`px-2 py-1 text-xs font-semibold rounded-full border-0 ${
                     order.status === "Pending"
                       ? "bg-yellow-100 text-yellow-800"
                       : order.status === "Processing"
@@ -125,43 +108,110 @@ const OrderManagement = () => {
                       : "bg-red-100 text-red-800"
                   }`}
                 >
-                  {order.status}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(order.createdAt).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 space-x-2 whitespace-nowrap text-sm text-gray-500">
-                {order.paymentStatus === "Cancelled" ? (
-                  <select
-                    value="Cancelled"
-                    disabled
-                    className="block px-3 py-2 text-sm bg-gray-100 border border-gray-300 rounded-md shadow-sm cursor-not-allowed"
-                  >
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                ) : (
-                  <select
-                    value={order.status}
-                    onChange={(e) =>
-                      handleStatusChange(order._id, e.target.value)
-                    }
-                    className="block px-3 py-2 text-sm bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none cursor-pointer hover:border-gray-400 transition-colors duration-200"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  <option value="Pending">Pending</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      <div className="mt-6">
+      {/* Desktop view - Table layout */}
+      <div className="hidden md:block overflow-x-auto">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden border rounded-lg">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Order ID
+                  </th>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    User
+                  </th>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Total Price
+                  </th>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Payment
+                  </th>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {ordersData?.data?.data?.map((order: any) => (
+                  <tr key={order._id} className="hover:bg-gray-50">
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                      <Link
+                        to={`/order/verification?order_id=${order?.transaction?.id}`}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        {order._id.substring(order._id.length - 8)}
+                      </Link>
+                    </td>
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                      {order?.user?.name}
+                    </td>
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
+                      ${order?.totalPrice}
+                    </td>
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
+                      <span
+                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          order.paymentStatus === "Paid"
+                            ? "bg-green-100 text-green-800"
+                            : order.paymentStatus === "Pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {order.paymentStatus}
+                      </span>
+                    </td>
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                        className={`px-2 py-1 text-xs font-semibold rounded-full border-0 ${
+                          order.status === "Pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : order.status === "Processing"
+                            ? "bg-blue-100 text-blue-800"
+                            : order.status === "Shipped"
+                            ? "bg-indigo-100 text-indigo-800"
+                            : order.status === "Delivered"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                    <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 sm:mt-6">
         <Pagination
           currentPage={filters.page}
           totalPages={totalPages}

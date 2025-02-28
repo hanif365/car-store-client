@@ -68,8 +68,6 @@ const ProfileManagement = () => {
   // Reference for password matching
   const newPassword = watch("newPassword");
 
-  console.log("profileData", profileData);
-
   // Set initial form values when profile data is loaded
   useEffect(() => {
     if (profileData?.data) {
@@ -153,26 +151,24 @@ const ProfileManagement = () => {
   }
 
   return (
-    <div className="container mx-auto px-1 py-6 max-w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+    <div className="container mx-auto px-2 sm:px-1 py-3 sm:py-6 max-w-full">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Profile Information Form */}
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-100"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white p-6 rounded-2xl shadow-lg"
         >
-          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-blue-600 flex items-center">
-            <FaUser className="mr-2" /> Update Profile
+          <h3 className="text-2xl font-bold mb-8 text-gray-800">
+            <FaUser className="inline-block mr-2 text-blue-600" />
+            Profile Information
           </h3>
 
-          <form
-            onSubmit={handleProfileSubmit(onProfileSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={handleProfileSubmit(onProfileSubmit)} className="space-y-6">
             {/* Profile Image */}
-            <div className="flex flex-col items-center mb-8">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mb-6 bg-gray-100 flex items-center justify-center border-4 border-blue-100 shadow-md">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-blue-100">
                 {imagePreview ? (
                   <img
                     src={imagePreview}
@@ -180,12 +176,15 @@ const ProfileManagement = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <FaUser className="text-gray-300 text-6xl" />
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                    <FaUser className="text-gray-300 text-5xl" />
+                  </div>
                 )}
               </div>
 
-              <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm sm:text-base transition-all duration-200 transform hover:scale-105 shadow-md flex items-center">
-                <span className="mr-2">Upload Photo</span>
+              <label className="cursor-pointer inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                <FaUser className="mr-2" />
+                Upload Photo
                 <input
                   type="file"
                   accept="image/*"
@@ -196,114 +195,81 @@ const ProfileManagement = () => {
             </div>
 
             {/* Name */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaUser className="mr-2 text-blue-500" /> Name
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <FaUser className="inline mr-2 text-blue-600" />
+                Full Name
               </label>
               <input
                 type="text"
                 {...registerProfile("name", { required: "Name is required" })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter your name"
               />
               {profileErrors.name && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span> {profileErrors.name.message}
-                </p>
+                <p className="mt-1 text-sm text-red-600">{profileErrors.name.message}</p>
               )}
             </div>
 
             {/* Email */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaEnvelope className="mr-2 text-blue-500" /> Email
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <FaEnvelope className="inline mr-2 text-blue-600" />
+                Email Address
               </label>
               <input
                 type="email"
                 value={profileData?.data?.email || ""}
                 readOnly
-                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed"
               />
-              <p className="mt-2 text-xs text-gray-500 italic">
-                Email cannot be changed
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
             </div>
 
             {/* Role */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaIdBadge className="mr-2 text-blue-500" /> Role
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <FaIdBadge className="inline mr-2 text-blue-600" />
+                Role
               </label>
               <input
                 type="text"
                 value={currentUser?.role || ""}
                 readOnly
-                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base capitalize"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed capitalize"
               />
-              <p className="mt-2 text-xs text-gray-500 italic">
-                Role cannot be changed
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Role cannot be changed</p>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               type="submit"
               disabled={isUploading}
-              className={`w-full py-3 px-4 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md ${
+              className={`w-full py-3 rounded-lg text-white font-medium transition duration-200 ${
                 isUploading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              {isUploading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Uploading Photo...
-                </span>
-              ) : (
-                "Update Profile"
-              )}
-            </motion.button>
+              {isUploading ? "Updating..." : "Update Profile"}
+            </button>
           </form>
         </motion.div>
 
         {/* Change Password Form */}
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-100 h-full flex flex-col"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white p-6 rounded-2xl shadow-lg"
         >
-          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-green-600 flex items-center">
-            <FaLock className="mr-2" /> Change Password
+          <h3 className="text-2xl font-bold mb-8 text-gray-800">
+            <FaLock className="inline-block mr-2 text-green-600" />
+            Change Password
           </h3>
 
-          <form
-            onSubmit={handlePasswordSubmit(onPasswordSubmit)}
-            className="space-y-6 flex-grow"
-          >
+          <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="space-y-6">
             {/* Current Password */}
-            <div className="group">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Current Password
               </label>
@@ -313,31 +279,30 @@ const ProfileManagement = () => {
                   {...registerPassword("currentPassword", {
                     required: "Current password is required",
                   })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                  className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   placeholder="Enter current password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showCurrentPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
+                    <FaEyeSlash className="text-gray-500" />
                   ) : (
-                    <FaEye className="text-gray-500 text-lg" />
+                    <FaEye className="text-gray-500" />
                   )}
                 </button>
               </div>
               {passwordErrors.currentPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
+                <p className="mt-1 text-sm text-red-600">
                   {passwordErrors.currentPassword.message}
                 </p>
               )}
             </div>
 
             {/* New Password */}
-            <div className="group">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 New Password
               </label>
@@ -351,33 +316,32 @@ const ProfileManagement = () => {
                       message: "Password must be at least 6 characters",
                     },
                   })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                  className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   placeholder="Enter new password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
                   onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showNewPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
+                    <FaEyeSlash className="text-gray-500" />
                   ) : (
-                    <FaEye className="text-gray-500 text-lg" />
+                    <FaEye className="text-gray-500" />
                   )}
                 </button>
               </div>
               {passwordErrors.newPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
+                <p className="mt-1 text-sm text-red-600">
                   {passwordErrors.newPassword.message}
                 </p>
               )}
             </div>
 
             {/* Confirm Password */}
-            <div className="group">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
+                Confirm New Password
               </label>
               <div className="relative">
                 <input
@@ -387,64 +351,54 @@ const ProfileManagement = () => {
                     validate: (value) =>
                       value === newPassword || "Passwords do not match",
                   })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                  className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                   placeholder="Confirm new password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
                   {showConfirmPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
+                    <FaEyeSlash className="text-gray-500" />
                   ) : (
-                    <FaEye className="text-gray-500 text-lg" />
+                    <FaEye className="text-gray-500" />
                   )}
                 </button>
               </div>
               {passwordErrors.confirmPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
+                <p className="mt-1 text-sm text-red-600">
                   {passwordErrors.confirmPassword.message}
                 </p>
               )}
             </div>
 
-            {/* Password Security Tips */}
-            <div className="bg-green-50 p-4 rounded-lg border border-green-100 mt-4">
+            {/* Password Requirements */}
+            <div className="bg-green-50 p-4 rounded-lg">
               <h4 className="text-sm font-medium text-green-800 mb-2 flex items-center">
-                <FaShieldAlt className="mr-2" /> Password Security Tips
+                <FaShieldAlt className="mr-2" />
+                Password Requirements
               </h4>
-              <ul className="text-xs text-green-700 space-y-1 ml-6 list-disc">
-                <li>Use at least 6 characters</li>
-                <li>Include uppercase and lowercase letters</li>
-                <li>Add numbers and special characters</li>
-                <li>Avoid using personal information</li>
-                <li>Don't reuse passwords across multiple sites</li>
-                <li>Don't share your password with anyone</li>
+              <ul className="text-sm text-green-700 space-y-1 ml-6 list-disc">
+                <li>Minimum 6 characters</li>
+                <li>Include numbers and special characters</li>
+                <li>Mix of uppercase and lowercase letters</li>
               </ul>
             </div>
 
-            {/* Additional Information */}
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-              <div className="flex items-start">
-                <FaInfoCircle className="text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                <p className="text-xs text-blue-700">
-                  After changing your password, you'll be automatically logged
-                  out and redirected to the login page. Please sign in with your
-                  new password.
-                </p>
-              </div>
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-sm text-blue-700 flex items-center">
+                <FaInfoCircle className="mr-2" />
+                You'll be logged out after changing your password
+              </p>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               type="submit"
-              className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md mt-4"
+              className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition duration-200"
             >
               Change Password
-            </motion.button>
+            </button>
           </form>
         </motion.div>
       </div>

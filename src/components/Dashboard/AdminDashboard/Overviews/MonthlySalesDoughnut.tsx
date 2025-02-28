@@ -11,6 +11,7 @@ interface MonthlySalesDoughnutProps {
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: "bottom" as const,
@@ -105,17 +106,19 @@ const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySold
   };
 
   return (
-    <div className="mt-3 p-3 bg-white rounded-lg shadow-sm w-full lg:w-1/2">
-      <h4 className="text-lg pb-5">Car Sales Statistics</h4>
-      <div className="h-[80%]">
-        <Doughnut
-          options={options}
-          data={data}
-          className="m-auto"
-        />
+    <div className="mt-3 p-3 sm:p-4 md:p-5 bg-white rounded-lg shadow-sm w-full lg:w-1/2">
+      <h4 className="text-base sm:text-lg md:text-xl pb-3 sm:pb-4 md:pb-5 font-medium">Car Sales Statistics</h4>
+      <div className="relative w-full" style={{ height: "calc(100% - 2rem)" }}>
+        <div className="h-[200px] sm:h-[250px] md:h-[280px] lg:h-[300px]">
+          <Doughnut
+            options={options}
+            data={data}
+            className="w-full h-full"
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default MonthlySalesDoughnut; 
+export default MonthlySalesDoughnut;
