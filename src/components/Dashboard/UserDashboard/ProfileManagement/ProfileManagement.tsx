@@ -68,8 +68,6 @@ const ProfileManagement = () => {
   // Reference for password matching
   const newPassword = watch("newPassword");
 
-  console.log("profileData", profileData);
-
   // Set initial form values when profile data is loaded
   useEffect(() => {
     if (profileData?.data) {
@@ -90,7 +88,6 @@ const ProfileManagement = () => {
 
   const onProfileSubmit = async (data: ProfileForm) => {
     try {
-      // Upload image if there's a new file
       if (imageFile) {
         setIsUploading(true);
         const imageUrl = await uploadImageToImgBB(imageFile);
@@ -98,7 +95,6 @@ const ProfileManagement = () => {
         setIsUploading(false);
       }
 
-      // Don't include email in the update
       await updateProfile({
         name: data.name,
         profileImage: data.profileImage,
@@ -129,17 +125,11 @@ const ProfileManagement = () => {
         "Password changed successfully. Please login again with your new password."
       );
 
-      // Log out the user
       setTimeout(() => {
-        // Clear auth state
         dispatch(logout());
-
-        // Remove token from localStorage
         localStorage.removeItem("token");
-
-        // Redirect to login page
         navigate("/login");
-      }, 2000); // Short delay to allow the user to see the success message
+      }, 2000);
     } catch (error) {
       toast.error(
         (error as { data?: { message?: string } })?.data?.message ||
@@ -151,28 +141,28 @@ const ProfileManagement = () => {
   if (isLoading) {
     return <Loader />;
   }
-
+// className="container mx-auto px-2 sm:px-0 py-3 sm:py-6 max-w-full"
   return (
-    <div className="container mx-auto px-1 py-6 max-w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+    <div className="container mx-auto px-2 sm:px-1 py-3 sm:py-6 max-w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
         {/* Profile Information Form */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-100"
+          className="bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg border border-gray-100"
         >
-          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-blue-600 flex items-center">
+          <h3 className="text-lg sm:text-xl lg:text-xl font-semibold mb-4 sm:mb-6 text-blue-600 flex items-center">
             <FaUser className="mr-2" /> Update Profile
           </h3>
 
           <form
             onSubmit={handleProfileSubmit(onProfileSubmit)}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
           >
             {/* Profile Image */}
-            <div className="flex flex-col items-center mb-8">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mb-6 bg-gray-100 flex items-center justify-center border-4 border-blue-100 shadow-md">
+            <div className="flex flex-col items-center mb-6 sm:mb-8">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden mb-4 sm:mb-6 bg-gray-100 flex items-center justify-center border-4 border-blue-100 shadow-md">
                 {imagePreview ? (
                   <img
                     src={imagePreview}
@@ -180,11 +170,11 @@ const ProfileManagement = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <FaUser className="text-gray-300 text-6xl" />
+                  <FaUser className="text-gray-300 text-4xl sm:text-5xl lg:text-6xl" />
                 )}
               </div>
 
-              <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm sm:text-base transition-all duration-200 transform hover:scale-105 shadow-md flex items-center">
+              <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-sm sm:text-base transition-all duration-200 transform hover:scale-105 shadow-md flex items-center">
                 <span className="mr-2">Upload Photo</span>
                 <input
                   type="file"
@@ -195,54 +185,57 @@ const ProfileManagement = () => {
               </label>
             </div>
 
-            {/* Name */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaUser className="mr-2 text-blue-500" /> Name
-              </label>
-              <input
-                type="text"
-                {...registerProfile("name", { required: "Name is required" })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
-                placeholder="Enter your name"
-              />
-              {profileErrors.name && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span> {profileErrors.name.message}
+            {/* Form Fields */}
+            <div className="space-y-4 sm:space-y-6">
+              {/* Name */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <FaUser className="mr-2 text-blue-500" /> Name
+                </label>
+                <input
+                  type="text"
+                  {...registerProfile("name", { required: "Name is required" })}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                  placeholder="Enter your name"
+                />
+                {profileErrors.name && (
+                  <p className="mt-2 text-xs sm:text-sm text-red-600 flex items-center">
+                    <span className="mr-1">⚠</span> {profileErrors.name.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <FaEnvelope className="mr-2 text-blue-500" /> Email
+                </label>
+                <input
+                  type="email"
+                  value={profileData?.data?.email || ""}
+                  readOnly
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base"
+                />
+                <p className="mt-2 text-xs text-gray-500 italic">
+                  Email cannot be changed
                 </p>
-              )}
-            </div>
+              </div>
 
-            {/* Email */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaEnvelope className="mr-2 text-blue-500" /> Email
-              </label>
-              <input
-                type="email"
-                value={profileData?.data?.email || ""}
-                readOnly
-                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base"
-              />
-              <p className="mt-2 text-xs text-gray-500 italic">
-                Email cannot be changed
-              </p>
-            </div>
-
-            {/* Role */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                <FaIdBadge className="mr-2 text-blue-500" /> Role
-              </label>
-              <input
-                type="text"
-                value={currentUser?.role || ""}
-                readOnly
-                className="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base capitalize"
-              />
-              <p className="mt-2 text-xs text-gray-500 italic">
-                Role cannot be changed
-              </p>
+              {/* Role */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  <FaIdBadge className="mr-2 text-blue-500" /> Role
+                </label>
+                <input
+                  type="text"
+                  value={currentUser?.role || ""}
+                  readOnly
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 bg-gray-50 rounded-lg focus:outline-none cursor-not-allowed text-sm sm:text-base capitalize"
+                />
+                <p className="mt-2 text-xs text-gray-500 italic">
+                  Role cannot be changed
+                </p>
+              </div>
             </div>
 
             <motion.button
@@ -250,7 +243,7 @@ const ProfileManagement = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isUploading}
-              className={`w-full py-3 px-4 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md ${
+              className={`w-full py-2 sm:py-3 px-4 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md ${
                 isUploading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
@@ -259,7 +252,7 @@ const ProfileManagement = () => {
               {isUploading ? (
                 <span className="flex items-center justify-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin -ml-1 mr-3 h-4 w-4 sm:h-5 sm:w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -292,127 +285,130 @@ const ProfileManagement = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-100 h-full flex flex-col"
+          className="bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg border border-gray-100 h-full flex flex-col"
         >
-          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-green-600 flex items-center">
+          <h3 className="text-lg sm:text-xl lg:text-xl font-semibold mb-4 sm:mb-6 text-green-600 flex items-center">
             <FaLock className="mr-2" /> Change Password
           </h3>
 
           <form
             onSubmit={handlePasswordSubmit(onPasswordSubmit)}
-            className="space-y-6 flex-grow"
+            className="space-y-4 sm:space-y-6 flex-grow"
           >
-            {/* Current Password */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Current Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showCurrentPassword ? "text" : "password"}
-                  {...registerPassword("currentPassword", {
-                    required: "Current password is required",
-                  })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
-                  placeholder="Enter current password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
-                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                >
-                  {showCurrentPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
-                  ) : (
-                    <FaEye className="text-gray-500 text-lg" />
-                  )}
-                </button>
+            {/* Password Fields */}
+            <div className="space-y-4 sm:space-y-6">
+              {/* Current Password */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Current Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    {...registerPassword("currentPassword", {
+                      required: "Current password is required",
+                    })}
+                    className="w-full pl-3 sm:pl-4 pr-10 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                    placeholder="Enter current password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  >
+                    {showCurrentPassword ? (
+                      <FaEyeSlash className="text-gray-500 text-base sm:text-lg" />
+                    ) : (
+                      <FaEye className="text-gray-500 text-base sm:text-lg" />
+                    )}
+                  </button>
+                </div>
+                {passwordErrors.currentPassword && (
+                  <p className="mt-2 text-xs sm:text-sm text-red-600 flex items-center">
+                    <span className="mr-1">⚠</span>{" "}
+                    {passwordErrors.currentPassword.message}
+                  </p>
+                )}
               </div>
-              {passwordErrors.currentPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
-                  {passwordErrors.currentPassword.message}
-                </p>
-              )}
-            </div>
 
-            {/* New Password */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                New Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showNewPassword ? "text" : "password"}
-                  {...registerPassword("newPassword", {
-                    required: "New password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
-                  })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
-                  placeholder="Enter new password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                >
-                  {showNewPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
-                  ) : (
-                    <FaEye className="text-gray-500 text-lg" />
-                  )}
-                </button>
+              {/* New Password */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    {...registerPassword("newPassword", {
+                      required: "New password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
+                    className="w-full pl-3 sm:pl-4 pr-10 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                    placeholder="Enter new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? (
+                      <FaEyeSlash className="text-gray-500 text-base sm:text-lg" />
+                    ) : (
+                      <FaEye className="text-gray-500 text-base sm:text-lg" />
+                    )}
+                  </button>
+                </div>
+                {passwordErrors.newPassword && (
+                  <p className="mt-2 text-xs sm:text-sm text-red-600 flex items-center">
+                    <span className="mr-1">⚠</span>{" "}
+                    {passwordErrors.newPassword.message}
+                  </p>
+                )}
               </div>
-              {passwordErrors.newPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
-                  {passwordErrors.newPassword.message}
-                </p>
-              )}
-            </div>
 
-            {/* Confirm Password */}
-            <div className="group">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  {...registerPassword("confirmPassword", {
-                    required: "Please confirm your password",
-                    validate: (value) =>
-                      value === newPassword || "Passwords do not match",
-                  })}
-                  className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
-                  placeholder="Confirm new password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <FaEyeSlash className="text-gray-500 text-lg" />
-                  ) : (
-                    <FaEye className="text-gray-500 text-lg" />
-                  )}
-                </button>
+              {/* Confirm Password */}
+              <div className="group">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    {...registerPassword("confirmPassword", {
+                      required: "Please confirm your password",
+                      validate: (value) =>
+                        value === newPassword || "Passwords do not match",
+                    })}
+                    className="w-full pl-3 sm:pl-4 pr-10 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base transition-all duration-200"
+                    placeholder="Confirm new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <FaEyeSlash className="text-gray-500 text-base sm:text-lg" />
+                    ) : (
+                      <FaEye className="text-gray-500 text-base sm:text-lg" />
+                    )}
+                  </button>
+                </div>
+                {passwordErrors.confirmPassword && (
+                  <p className="mt-2 text-xs sm:text-sm text-red-600 flex items-center">
+                    <span className="mr-1">⚠</span>{" "}
+                    {passwordErrors.confirmPassword.message}
+                  </p>
+                )}
               </div>
-              {passwordErrors.confirmPassword && (
-                <p className="mt-2 text-sm text-red-600 flex items-center">
-                  <span className="mr-1">⚠</span>{" "}
-                  {passwordErrors.confirmPassword.message}
-                </p>
-              )}
             </div>
 
             {/* Password Security Tips */}
-            <div className="bg-green-50 p-4 rounded-lg border border-green-100 mt-4">
-              <h4 className="text-sm font-medium text-green-800 mb-2 flex items-center">
+            <div className="bg-green-50 p-3 sm:p-4 rounded-lg border border-green-100 mt-4">
+              <h4 className="text-xs sm:text-sm font-medium text-green-800 mb-2 flex items-center">
                 <FaShieldAlt className="mr-2" /> Password Security Tips
               </h4>
               <ul className="text-xs text-green-700 space-y-1 ml-6 list-disc">
@@ -426,7 +422,7 @@ const ProfileManagement = () => {
             </div>
 
             {/* Additional Information */}
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100">
               <div className="flex items-start">
                 <FaInfoCircle className="text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
                 <p className="text-xs text-blue-700">
@@ -441,7 +437,7 @@ const ProfileManagement = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md mt-4"
+              className="w-full py-2 sm:py-3 px-4 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium text-sm sm:text-base transition-all duration-200 shadow-md mt-4"
             >
               Change Password
             </motion.button>
