@@ -18,9 +18,9 @@ const options = {
       display: false,
       labels: {
         font: {
-          size: window.innerWidth < 768 ? 10 : 12
-        }
-      }
+          size: window.innerWidth < 768 ? 10 : 12,
+        },
+      },
     },
     title: {
       display: true,
@@ -28,9 +28,9 @@ const options = {
       color: "#374151",
       font: {
         size: window.innerWidth < 768 ? 14 : 16,
-        weight: "bold" as const
+        weight: "bold" as const,
       },
-      padding: window.innerWidth < 768 ? 10 : 20
+      padding: window.innerWidth < 768 ? 10 : 20,
     },
     tooltip: {
       callbacks: {
@@ -39,11 +39,11 @@ const options = {
         },
       },
       titleFont: {
-        size: window.innerWidth < 768 ? 12 : 14
+        size: window.innerWidth < 768 ? 12 : 14,
       },
       bodyFont: {
-        size: window.innerWidth < 768 ? 11 : 13
-      }
+        size: window.innerWidth < 768 ? 11 : 13,
+      },
     },
   },
 };
@@ -60,20 +60,23 @@ const labels = [
 
 const currentMonth = new Date().getMonth();
 
-const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySoldProducts = [] }) => {
+const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({
+  monthlySoldProducts = [],
+}) => {
   // Group monthly data into bimonthly periods
   // If we don't have real data, use fallback data
   const defaultData = [5, 3, 4, 1, 2, 3, 4, 1, 2, 1, 3, 5];
-  const monthlyData = monthlySoldProducts.length === 12 ? monthlySoldProducts : defaultData;
-  
+  const monthlyData =
+    monthlySoldProducts.length === 12 ? monthlySoldProducts : defaultData;
+
   // Convert monthly data to bimonthly data
   const bimonthlyData = [
-    monthlyData[0] + monthlyData[1],     // Jan-Feb
-    monthlyData[2] + monthlyData[3],     // Mar-Apr
-    monthlyData[4] + monthlyData[5],     // May-Jun
-    monthlyData[6] + monthlyData[7],     // Jul-Aug
-    monthlyData[8] + monthlyData[9],     // Sep-Oct
-    monthlyData[10] + monthlyData[11],   // Nov-Dec
+    monthlyData[0] + monthlyData[1], // Jan-Feb
+    monthlyData[2] + monthlyData[3], // Mar-Apr
+    monthlyData[4] + monthlyData[5], // May-Jun
+    monthlyData[6] + monthlyData[7], // Jul-Aug
+    monthlyData[8] + monthlyData[9], // Sep-Oct
+    monthlyData[10] + monthlyData[11], // Nov-Dec
   ];
 
   const data = {
@@ -83,8 +86,8 @@ const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySold
         data: bimonthlyData,
         backgroundColor: [
           currentMonth === 0 || currentMonth === 1
-            ? "rgb(56, 132, 255, 0.5)"
-            : "rgba(255, 99, 132, 0.2)",
+            ? "rgba(255, 99, 132, 0.2)"
+            : "rgb(56, 132, 255, 0.5)",
           currentMonth === 2 || currentMonth === 3
             ? "rgb(56, 132, 255, 0.5)"
             : "rgba(54, 162, 235, 0.2)",
@@ -103,8 +106,8 @@ const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySold
         ],
         borderColor: [
           currentMonth === 0 || currentMonth === 1
-            ? "rgb(56, 132, 255, 1)"
-            : "rgba(255, 99, 132, 0.3)",
+            ? "rgba(255, 99, 132, 0.3)"
+            : "rgb(56, 132, 255, 1)",
           currentMonth === 2 || currentMonth === 3
             ? "rgb(56, 132, 255, 1)"
             : "rgba(54, 162, 235, 0.3)",
@@ -129,11 +132,7 @@ const MonthlySalesDoughnut: React.FC<MonthlySalesDoughnutProps> = ({ monthlySold
   return (
     <div className="relative w-full h-full">
       <div className="h-[200px] sm:h-[220px] md:h-[250px] lg:h-[340px]">
-        <Doughnut
-          options={options}
-          data={data}
-          className="w-full h-full"
-        />
+        <Doughnut options={options} data={data} className="w-full h-full" />
       </div>
     </div>
   );
