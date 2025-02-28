@@ -53,7 +53,7 @@ const ProductDetailsPage = () => {
     toast.success("Product added to cart successfully", {
       duration: 1500,
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
