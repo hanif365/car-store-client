@@ -13,8 +13,6 @@ const OrderDetailsPage = () => {
 
   const orderData = data?.data[0];
 
-  console.log("orderData : ", orderData);
-
   const downloadPDF = () => {
     const doc = new jsPDF();
     let yPos = 20;
@@ -132,63 +130,60 @@ const OrderDetailsPage = () => {
 
   if (!orderData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center text-base sm:text-lg md:text-xl">
         No order found.
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 bg-white shadow rounded-lg mt-16 sm:mt-20">
-      <button
-        onClick={downloadPDF}
-        className="w-full sm:w-auto mb-4 p-2 bg-brand-primary text-white rounded hover:bg-opacity-90 transition-colors"
-      >
-        Download PDF
-      </button>
+    <div className="min-h-screen w-full max-w-7xl mx-auto p-6 sm:p-6 md:p-6 lg:p-8">
+      <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 md:p-8 lg:p-10 mt-12 sm:mt-16 md:mt-20">
+        <button
+          onClick={downloadPDF}
+          className="w-full sm:w-auto px-4 py-2.5 mb-6 bg-brand-primary text-white text-sm sm:text-base rounded-lg hover:bg-opacity-90 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+        >
+          Download PDF
+        </button>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start mb-6 border-b pb-6">
-        <div className="mb-4 sm:mb-0">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-            INVOICE
-          </h1>
-          <p className="text-gray-600 mt-2">Car Store Inc.</p>
-        </div>
-        <div className="text-left sm:text-right">
-          <p className="text-xl font-semibold text-gray-800">
-            #{orderData.invoice_no}
-          </p>
-          <p className="text-gray-600">
-            {new Date(orderData.date_time).toLocaleDateString()}
-          </p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mb-8">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Bill To:</h2>
-          <div className="text-gray-600 space-y-1">
-            <p className="font-medium text-gray-800">{orderData.name}</p>
-            <p>{orderData.email}</p>
-            <p>{orderData.phone_no}</p>
-            <p>{orderData.address}</p>
-            <p>{orderData.city}</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-8 border-b pb-6">
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+              INVOICE
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">Car Store Inc.</p>
+          </div>
+          <div className="text-left sm:text-right">
+            <p className="text-lg sm:text-xl font-semibold text-gray-800 mb-1">
+              #{orderData.invoice_no}
+            </p>
+            <p className="text-sm sm:text-base text-gray-600">
+              {new Date(orderData.date_time).toLocaleDateString()}
+            </p>
           </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Payment Details:
-          </h2>
-          <div className="text-gray-600">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 lg:gap-12 mb-8">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">
+              Bill To:
+            </h2>
+            <div className="text-sm sm:text-base text-gray-600 space-y-2">
+              <p className="font-medium text-gray-800">{orderData.name}</p>
+              <p>{orderData.email}</p>
+              <p>{orderData.phone_no}</p>
+              <p className="break-words">{orderData.address}</p>
+              <p>{orderData.city}</p>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">
+              Payment Details:
+            </h2>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:text-base">
               <p className="font-medium">Status:</p>
-              <p
-                className={`${
-                  orderData.bank_status === "Success"
-                    ? "text-green-600"
-                    : "text-red-600"
-                } font-semibold`}
-              >
+              <p className={`font-semibold ${orderData.bank_status === "Success" ? "text-green-600" : "text-red-600"}`}>
                 {orderData.bank_status}
               </p>
 
@@ -216,7 +211,7 @@ const OrderDetailsPage = () => {
 
               {orderData.discsount_amount && (
                 <>
-                  <p className="font-medium">Discount Amount:</p>
+                  <p className="font-medium">Discount:</p>
                   <p className="break-words">
                     {new Intl.NumberFormat("en-BD", {
                       style: "currency",
@@ -228,43 +223,43 @@ const OrderDetailsPage = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">
-          Transaction Details
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
-          <div className="space-y-1">
-            <p className="font-medium">SP Code:</p>
-            <p className="break-words">{orderData.sp_code}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-medium">SP Message:</p>
-            <p className="break-words">{orderData.sp_message}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-medium">Transaction ID:</p>
-            <p className="break-words">{orderData.bank_trx_id}</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-medium">Order ID:</p>
-            <p className="break-words">{orderData.order_id}</p>
+        <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-8">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">
+            Transaction Details
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:text-base text-gray-600">
+            <div className="space-y-2">
+              <p className="font-medium">SP Code:</p>
+              <p className="break-words bg-white p-2 rounded">{orderData.sp_code}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="font-medium">SP Message:</p>
+              <p className="break-words bg-white p-2 rounded">{orderData.sp_message}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="font-medium">Transaction ID:</p>
+              <p className="break-words bg-white p-2 rounded">{orderData.bank_trx_id}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="font-medium">Order ID:</p>
+              <p className="break-words bg-white p-2 rounded">{orderData.order_id}</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t pt-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-          <div className="text-gray-600">
-            <p>Transaction Time:</p>
-            <p className="font-medium">
-              {new Date(orderData.date_time).toLocaleTimeString()}
-            </p>
-          </div>
-          <div className="text-left sm:text-right">
-            <p className="text-sm text-gray-600">Thank you for your business</p>
-            <p className="text-sm text-gray-600">Car Store Inc.</p>
+        <div className="border-t pt-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="text-sm sm:text-base text-gray-600">
+              <p>Transaction Time:</p>
+              <p className="font-medium">
+                {new Date(orderData.date_time).toLocaleTimeString()}
+              </p>
+            </div>
+            <div className="text-left sm:text-right text-sm sm:text-base">
+              <p className="text-gray-600">Thank you for your business</p>
+              <p className="text-gray-600 font-medium">Car Store Inc.</p>
+            </div>
           </div>
         </div>
       </div>

@@ -27,42 +27,41 @@ const CartSheet = () => {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="link" className="relative">
-          <FaShoppingCart />
+          <FaShoppingCart className="text-lg sm:text-xl md:text-2xl" />
 
           {cartData.totalQuantity ? (
-            <p className=" absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
-              {" "}
+            <p className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 text-xs sm:text-sm flex items-center justify-center">
               {cartData.totalQuantity}
             </p>
-          ) : (
-            ""
-          )}
+          ) : null}
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="flex flex-col gap-4 p-6 bg-white shadow-lg rounded-lg max-w-md">
-        <SheetHeader className="border-b pb-4">
-          <SheetTitle className="text-xl font-semibold">
+      <SheetContent className="flex flex-col gap-3 sm:gap-4 p-4 sm:p-6 bg-white shadow-lg rounded-lg w-[90vw] sm:w-[450px] max-w-full">
+        <SheetHeader className="border-b pb-3 sm:pb-4">
+          <SheetTitle className="text-lg sm:text-xl font-semibold">
             Your Shopping Cart
           </SheetTitle>
-          <SheetDescription className="text-sm text-gray-500">
+          <SheetDescription className="text-xs sm:text-sm text-gray-500">
             Please review your selected items before proceeding to checkout.
           </SheetDescription>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">
           {cartData.items.length > 0 ? (
-            <ul className="space-y-4">
+            <ul className="space-y-3 sm:space-y-4">
               {cartData.items.map((item) => (
-                <li key={item._id} className="flex items-center gap-4">
+                <li key={item._id} className="flex items-center gap-2 sm:gap-4">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="h-16 w-16 rounded object-cover"
+                    className="h-12 w-12 sm:h-16 sm:w-16 rounded object-cover"
                   />
-                  <div className="flex-1">
-                    <h4 className="text-sm font-medium">{item.name}</h4>
-                    <div className="flex items-center gap-2 mt-1">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs sm:text-sm font-medium truncate">
+                      {item.name}
+                    </h4>
+                    <div className="flex items-center gap-1 sm:gap-2 mt-1">
                       <button
                         onClick={() =>
                           dispatch(
@@ -73,7 +72,7 @@ const CartSheet = () => {
                           )
                         }
                         disabled={item.quantity <= 1}
-                        className={`w-6 h-6 rounded ${
+                        className={`w-5 h-5 sm:w-6 sm:h-6 text-xs sm:text-sm rounded ${
                           item.quantity <= 1
                             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                             : "bg-gray-200 text-black hover:bg-gray-300"
@@ -81,7 +80,7 @@ const CartSheet = () => {
                       >
                         -
                       </button>
-                      <span className="text-sm font-medium">
+                      <span className="text-xs sm:text-sm font-medium min-w-[20px] text-center">
                         {item.quantity}
                       </span>
                       <button
@@ -94,7 +93,7 @@ const CartSheet = () => {
                           )
                         }
                         disabled={item.quantity >= item.stock}
-                        className={`w-6 h-6 rounded ${
+                        className={`w-5 h-5 sm:w-6 sm:h-6 text-xs sm:text-sm rounded ${
                           item.quantity >= item.stock
                             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                             : "bg-gray-200 text-black hover:bg-gray-300"
@@ -104,12 +103,12 @@ const CartSheet = () => {
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm font-semibold text-gray-800">
+                  <p className="text-xs sm:text-sm font-semibold text-gray-800 whitespace-nowrap">
                     ${(item.quantity * item.price).toFixed(2)}
                   </p>
                   <button
                     onClick={() => dispatch(removeFromCart(item._id))}
-                    className="text-red-600 text-sm hover:underline"
+                    className="text-red-600 text-xs sm:text-sm hover:underline whitespace-nowrap"
                   >
                     Remove
                   </button>
@@ -117,31 +116,35 @@ const CartSheet = () => {
               ))}
             </ul>
           ) : (
-            <p className="text-center text-gray-500">Your cart is empty.</p>
+            <p className="text-center text-xs sm:text-sm text-gray-500">
+              Your cart is empty.
+            </p>
           )}
 
-          <div className="border-b my-3"></div>
+          <div className="border-b my-2 sm:my-3"></div>
 
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-medium text-gray-700">
+          <div className="flex justify-between items-center mb-2 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-gray-700">
               Total Quantity:
             </span>
-            <span className="text-lg font-bold">{cartData.totalQuantity}</span>
+            <span className="text-sm sm:text-lg font-bold">
+              {cartData.totalQuantity}
+            </span>
           </div>
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm font-medium text-gray-700">
+          <div className="flex justify-between items-center mb-2 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-gray-700">
               Total Price:
             </span>
-            <span className="text-lg font-bold">
+            <span className="text-sm sm:text-lg font-bold">
               ${cartData.totalPrice.toFixed(2)}
             </span>
           </div>
         </div>
 
-        <SheetFooter className="border-t pt-4">
+        <SheetFooter className="border-t pt-3 sm:pt-4">
           <SheetClose asChild>
             <Button
-              className="w-full bg-brand-primary text-white hover:bg-brand-secondary"
+              className="w-full bg-brand-primary text-white text-xs sm:text-sm py-2 sm:py-3 hover:bg-brand-secondary transition-colors duration-200"
               onClick={() => navigate("/checkout")}
               disabled={cartData.items.length === 0}
             >
