@@ -21,7 +21,10 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <div id="featured-cars" className="container mx-auto px-4 py-12 sm:py-16 md:py-20 lg:py-24">
+    <div
+      id="featured-cars"
+      className="container mx-auto px-4 py-12 sm:py-16 md:py-20 lg:py-24"
+    >
       <div className="text-center mb-8 sm:mb-12 md:mb-16">
         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold relative inline-block">
           <span className="text-brand-primary">Featured</span>
@@ -44,13 +47,13 @@ const FeaturedProducts = () => {
               alt={product.name}
               className="w-full h-full object-cover"
             />
-            
-            <motion.div 
+
+            <motion.div
               className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/90 to-black/100 flex flex-col justify-end p-3 sm:p-4 md:p-6"
               initial={{ opacity: 0 }}
               variants={{
                 hover: { opacity: 1 },
-                rest: { opacity: 0 }
+                rest: { opacity: 0 },
               }}
               transition={{ duration: 0.3 }}
             >
@@ -58,14 +61,14 @@ const FeaturedProducts = () => {
                 initial={{ y: 20, opacity: 0 }}
                 variants={{
                   hover: { y: 0, opacity: 1 },
-                  rest: { y: 20, opacity: 0 }
+                  rest: { y: 20, opacity: 0 },
                 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
               >
                 <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2 line-clamp-2">
                   {product.name}
                 </h3>
-                
+
                 <div className="space-y-0.5 sm:space-y-1 md:space-y-1.5 mb-2 sm:mb-3 text-white text-sm sm:text-base">
                   <div className="flex items-center">
                     <span className="font-medium mr-2">Brand:</span>
