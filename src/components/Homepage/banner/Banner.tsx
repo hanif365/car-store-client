@@ -3,7 +3,7 @@ import { Link as ScrollLink } from "react-scroll";
 
 const Banner = () => {
   return (
-    <div className="text-black text-center pt-24 md:pt-28 lg:pt-36 2xl:pt-52">
+    <div className="text-black text-center pt-36 md:pt-28 lg:pt-36 2xl:pt-52 pb-10 md:pb-0">
       <div className="px-2 md:px-0">
         <h1 className="text-4xl text-brand-secondary leading-10 md:text-6xl md:leading-[4rem] lg:text-7xl lg:leading-[5rem] 2xl:text-8xl 2xl:leading-[8rem] font-extrabold mb-8">
           Find Your Dream Car <br /> With{" "}
@@ -29,7 +29,7 @@ const Banner = () => {
         </ScrollLink>
       </div>
 
-      <div className="h-screen bg-[url('/bg_hero.png')] bg-center bg-cover bg-no-repeat mt-[-120px] relative -z-10">
+      <div className="h-screen bg-[url('/bg_hero.png')] bg-center bg-cover bg-no-repeat mt-[-120px] relative -z-10 hidden md:block">
         <div className="animate-bus absolute right-20 bottom-36">
           <img
             src="/bus.png"
