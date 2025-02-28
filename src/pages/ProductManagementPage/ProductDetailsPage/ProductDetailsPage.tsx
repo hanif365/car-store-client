@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { selectAllProducts } from "@/redux/features/products/productsSlice";
+import { useGetProductQuery } from "@/redux/features/products/productsApi";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
 import Loader from "@/components/Shared/Loader/Loader";
@@ -8,17 +8,16 @@ import Loader from "@/components/Shared/Loader/Loader";
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const products = useAppSelector(selectAllProducts);
+  const { data: product, isLoading } = useGetProductQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
   const cartData = useAppSelector((state) => state.cart);
 
-  if (!products || products.length === 0) {
+  if (isLoading) {
     return <Loader />;
   }
 
-  // Convert id to string for a proper match
-  const product = products.find((item) => String(item._id) === String(id));
-
-  if (!product) {
+  if (!product?.data) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center text-2xl font-bold">Product not found</div>
@@ -26,24 +25,26 @@ const ProductDetailsPage = () => {
     );
   }
 
+  const productData = product.data;
+
   const existingCartItem = cartData.items?.find(
-    (item) => String(item._id) === String(product._id)
+    (item) => String(item._id) === String(productData._id)
   );
 
   const currentQuantity = existingCartItem ? existingCartItem.quantity : 0;
 
   const handleAddToCart = () => {
-    if (currentQuantity >= product.stock) {
+    if (currentQuantity >= productData.stock) {
       return;
     }
 
     const productInfo = {
-      _id: product._id,
-      name: product.name,
-      price: product.price,
+      _id: productData._id,
+      name: productData.name,
+      price: productData.price,
       quantity: 1,
-      stock: product.stock,
-      image: product.image,
+      stock: productData.stock,
+      image: productData.image,
     };
 
     dispatch(addToCart(productInfo));
@@ -61,14 +62,14 @@ const ProductDetailsPage = () => {
             <div className="md:w-1/2 relative">
               <div className="w-full h-[400px] relative">
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={productData.image}
+                  alt={productData.name}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute top-10 left-4 z-10">
                 <span className="bg-brand-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
-                  {product.category}
+                  {productData.category}
                 </span>
               </div>
             </div>
@@ -76,29 +77,29 @@ const ProductDetailsPage = () => {
             {/* Details Section */}
             <div className="md:w-1/2 p-8 md:p-12 space-y-2">
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                {product.name}
+                {productData.name}
               </h1>
               <p className="text-xl text-brand-secondary font-medium">
-                {product.brand} {product.model}
+                {productData.brand} {productData.model}
               </p>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Year</span>
                   <span className="text-lg font-semibold">
-                    {product.yearOfManufacture}
+                    {productData.yearOfManufacture}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Stock</span>
                   <span className="text-lg font-semibold">
-                    {product.stock} units
+                    {productData.stock} units
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600">Price</span>
                   <span className="text-3xl font-bold text-brand-primary">
-                    ৳{product.price.toLocaleString()}
+                    ৳{productData.price.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -106,12 +107,12 @@ const ProductDetailsPage = () => {
               <div className="border-t pt-6">
                 <h3 className="text-xl font-semibold mb-3">Description</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {product.description}
+                  {productData.description}
                 </p>
               </div>
 
               <div className="pt-6">
-                {currentQuantity >= product.stock ? (
+                {currentQuantity >= productData.stock ? (
                   <button
                     className="w-full py-4 bg-gray-400 text-white rounded-lg font-semibold cursor-not-allowed"
                     disabled

@@ -113,7 +113,7 @@ const AllProductPage = () => {
             {productsData?.data?.data?.map((product: Product) => (
               <motion.div
                 key={product._id}
-                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-[300px] relative"
+                className="bg-white rounded-xl overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.05)] hover:shadow-[0_0_30px_rgba(0,0,0,0.15)] transition-shadow duration-300 h-[300px] relative"
                 whileHover="hover"
                 initial="rest"
               >
