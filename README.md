@@ -1,4 +1,5 @@
-![carstore](https://github.com/user-attachments/assets/5364d06b-d6d3-44fb-bb3c-5ec9ec89ca14)
+![dashboard](https://github.com/user-attachments/assets/238bbc28-4197-4090-bf5f-4431ebadc22f)
+
 
 # 🚗 Car Store | Your Premium Vehicles Marketplace
 
